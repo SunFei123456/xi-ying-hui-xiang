@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文化意義 - 西營盤</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* ===== 卡片列表 ===== */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .significance-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.06),
+                0 2px 4px -2px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+
+
+        .significance-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-num {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 3rem;
+            opacity: 0.08;
+            color: var(--text-dark);
+            position: absolute;
+            top: 8px;
+            right: 24px;
+            line-height: 1;
+            user-select: none;
+            transition: all 0.4s ease;
+        }
+
+        .significance-card:hover .card-num {
+            opacity: 0.15;
+            transform: scale(1.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-red), #e74c3c);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .card-title-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .card-body {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-body p {
+            margin-bottom: 10px;
+        }
+
+        .card-highlight {
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+            border-left: 3px solid var(--accent-red);
+            padding: 12px 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 12px 0;
+            font-style: italic;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-tag {
+            padding: 5px 14px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s;
+            cursor: default;
+            color: var(--text-muted);
+        }
+
+        .card-tag:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
+        }
+
+        /* ===== 響應式 ===== */
+        @media (max-width: 768px) {
+            .significance-card {
+                padding: 24px 20px;
+            }
+
+            .card-num {
+                font-size: 2.2rem;
+                right: 16px;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-title-text {
+                font-size: 1.05rem;
+            }
+
+            .card-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- 頂部導航 -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- 主內容 -->
+    <main class="main-container">
+        <h1 class="page-title">文化意義</h1>
+
+        <div class="cards-list">
+            <!-- 卡片1：引言 -->
+            <div class="significance-card fade-in-up delay-1">
+                <div class="card-num">01</div>
+                <div class="card-header">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-title-text">多重文化意義的交匯</div>
+                </div>
+                <div class="card-body">
+                    <p>香港西營盤的塗鴉文化具有多重文化意義，是<strong>城市記憶的載體</strong>、<strong>社區活化的媒介</strong>以及<strong>多元文化對話的空間</strong>。
+                    </p>
+                    <p>根據截至 2026 年 3 月的最新公開資訊，這片街區的塗鴉藝術已超越了單純的視覺裝飾，成為連接歷史與當代、官方與民間、本地與全球的文化節點。</p>
+                    <div class="card-highlight">
+                        "塗鴉並非單純的'破壞'，而是為舊建築的外牆、鐵門、樓梯角落等空間注入新的敘事。"
+                    </div>
+                </div>
+                <div class="card-tags">
+                    <span class="card-tag">城市記憶</span>
+                    <span class="card-tag">社區活化</span>
+                    <span class="card-tag">文化對話</span>
+                </div>
+            </div>
+
+            <!-- 卡片2：歷史與當代的交織 -->
+            <div class="significance-card fade-in-up delay-2">
+                <div class="card-num">02</div>
+                <div class="card-header">
+                    <div class="card-icon">🏛️</div>
+                    <div class="card-title-text">歷史與當代的交織</div>
+                </div>
+                <div class="card-body">
+                    <p>西營盤是香港島中西區的一個歷史悠久的街區，保留著眾多<strong>舊式店鋪、傳統市場和舊式唐樓</strong>。塗鴉藝術為這片老舊街區注入了全新的活力，形成一種"活力與潮流"的共生景觀。
+                    </p>
+                    <div class="card-highlight">
+                        "2016 年啟動的'城市門扉故事'社區藝術項目，邀請藝術家根據當地店鋪的口述歷史在鐵門上創作塗鴉，使工藝傳承和人文故事得以視覺呈現。"
+                    </div>
+                    <p>這些作品不僅美化了街區，更讓老一輩的手藝和記憶通過年輕人的藝術語言獲得了新的生命，實現了<strong>跨代際的文化傳遞</strong>。</p>
+                </div>
+                <div class="card-tags">
+                    <span class="card-tag">城市門扉故事</span>
+                    <span class="card-tag">口述歷史</span>
+                    <span class="card-tag">工藝傳承</span>
+                    <span class="card-tag">跨代際傳遞</span>
+                </div>
+            </div>
+
+            <!-- 卡片3：藝術賦權與空間再生 -->
+            <div class="significance-card fade-in-up delay-3">
+                <div class="card-num">03</div>
+                <div class="card-header">
+                    <div class="card-icon">🎨</div>
+                    <div class="card-title-text">藝術賦權與空間再生</div>
+                </div>
+                <div class="card-body">
+                    <p>通過官方支持的藝術節（如 <strong>HKwalls</strong>）以及非營利組織的努力，塗鴉已從邊緣走向部分被認可的公共藝術形式。</p>
+                    <ul class="feature-list">
+                        <li>芬蘭藝術家<strong>里塔·奎斯瑪（Riitta Kuisma）</strong>於 2024 年創作的"<strong>Be
+                                Well</strong>"壁畫位於西營盤營道東側，強調身心健康和自然療癒，得到了<strong>香港旅遊發展局</strong>的支持</li>
+                        <li><strong>ARTLANE</strong> 區域有 <strong>9 位本地和國際藝術家</strong>在 <strong>13
+                                棟建築</strong>上繪製了主題壁畫，融入了維也納音樂和好萊塢傳奇等元素，將這條小巷變成了一個戶外藝術畫廊</li>
+                    </ul>
+                    <p>這些項目證明，當塗鴉獲得制度性支持時，它能夠成為<strong>城市更新的有效工具</strong>，為老舊社區帶來經濟活力與文化認同。</p>
+                </div>
+                <div class="card-tags">
+                    <span class="card-tag">HKwalls</span>
+                    <span class="card-tag">Be Well</span>
+                    <span class="card-tag">ARTLANE</span>
+                    <span class="card-tag">港旅局支持</span>
+                    <span class="card-tag">城市更新</span>
+                </div>
+            </div>
+
+            <!-- 卡片4：旅遊與文化消費的雙刃劍 -->
+            <div class="significance-card fade-in-up delay-4">
+                <div class="card-num">04</div>
+                <div class="card-header">
+                    <div class="card-icon">⚖️</div>
+                    <div class="card-title-text">旅遊與文化消費的雙刃劍</div>
+                </div>
+                <div class="card-body">
+                    <p>西營盤的塗鴉藝術已成為遊客探索當地文化、超越中環的熱門地點。然而，這也引發了<strong>商業化與真實性之間的張力</strong>：</p>
+                    <ul class="feature-list">
+                        <li><strong>積極面</strong>：提升了該地區的知名度，帶動了周邊咖啡館、創意商店和民宿的發展，為舊區注入了經濟活力</li>
+                        <li><strong>隱憂面</strong>：可能會削弱社區原有的社會結構，過度商業化可能稀釋塗鴉藝術原本的反叛精神和社區屬性</li>
+                        <li><strong>觀念衝突</strong>：一些當地居民仍認為塗鴉是"非法行為"，這反映了香港在<strong>秩序與自由、規範與創造力</strong>之間持續的博弈</li>
+                    </ul>
+                    <div class="card-highlight">
+                        "如何在吸引遊客的同時保護社區的真實性，是西營盤塗鴉文化未來需要面對的核心命題。"
+                    </div>
+                </div>
+                <div class="card-tags">
+                    <span class="card-tag">商業化</span>
+                    <span class="card-tag">真實性</span>
+                    <span class="card-tag">秩序與自由</span>
+                    <span class="card-tag">社區博弈</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 頁面導航 -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="works.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Works
+            </a>
+            <a href="index.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Back to Home <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

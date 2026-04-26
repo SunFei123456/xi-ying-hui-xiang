@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品 - 西營盤塗鴉</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* ===== 作品網格 ===== */
+        .works-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .work-row {
+            display: grid;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .work-row.reverse {
+            grid-template-columns: 1.8fr 1fr;
+        }
+
+        /* 白色圖片卡 */
+        .work-image-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-light);
+            position: relative;
+            aspect-ratio: 1 / 1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .work-image-card:hover {
+            transform: translateY(-6px) rotate(-1deg);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .work-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 5s ease;
+        }
+
+        .work-image-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .work-image-card .img-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 50%);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .work-image-card:hover .img-overlay {
+            opacity: 1;
+        }
+
+        .img-overlay-text {
+            color: white;
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 白色內容卡 */
+        .work-content-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.06),
+                0 2px 4px -2px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+
+
+        .work-content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .work-num {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 2.5rem;
+            opacity: 0.08;
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            line-height: 1;
+            user-select: none;
+            color: var(--text-dark);
+        }
+
+        .work-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+            color: var(--text-dark);
+        }
+
+        .work-artist {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .work-desc {
+            font-size: 0.92rem;
+            line-height: 1.85;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        .work-desc p {
+            margin-bottom: 10px;
+        }
+
+        .work-highlight {
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+            border-left: 3px solid var(--accent-red);
+            padding: 10px 14px;
+            border-radius: 0 10px 10px 0;
+            margin: 10px 0;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .work-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .work-tag {
+            padding: 4px 12px;
+            background: #f5f5f5;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s;
+            cursor: default;
+            color: var(--text-muted);
+        }
+
+        .work-tag:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
+        }
+
+        /* ===== 響應式 ===== */
+        @media (max-width: 768px) {
+
+            .work-row,
+            .work-row.reverse {
+                grid-template-columns: 1fr;
+            }
+
+            .work-image-card {
+                aspect-ratio: 1 / 1;
+                order: -1;
+            }
+
+            .work-content-card {
+                padding: 24px 20px;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .work-name {
+                font-size: 1.1rem;
+            }
+
+            .work-num {
+                font-size: 2rem;
+                top: 8px;
+                right: 12px;
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- 頂部導航 -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- 主內容 -->
+    <main class="main-container">
+        <h1 class="page-title">作品</h1>
+
+        <div class="works-grid">
+            <!-- 作品1：蛻變 -->
+            <div class="work-row fade-in-up delay-1">
+                <div class="work-image-card">
+                    <img src="images/work1.png" alt="Metamorphosis">
+                    <div class="img-overlay">
+                        <div class="img-overlay-text">Metamorphosis</div>
+                    </div>
+                </div>
+                <div class="work-content-card">
+                    <div class="work-num">01</div>
+                    <div class="work-name">蛻變 · Metamorphosis</div>
+                    <div class="work-artist">里塔·奎斯瑪（Riitta Kuisma）· 芬蘭</div>
+                    <div class="work-desc">
+                        <p>這位芬蘭藝術家以其壁畫和肖像畫而聞名。她的大部分作品都以<strong>自然</strong>為主題，探索人類與自然的相互作用。她的作品遍佈北美、歐洲和亞洲許多國家的公共空間和私人收藏。
+                        </p>
+                        <div class="work-highlight">
+                            "三幅壁畫都以'蛻變'為靈感，彼此相輔相成。"
+                        </div>
+                        <p>牆上的潑濺顏料和地上的火車代表了豐富的藝術元素。色彩斑斕的<strong>蝴蝶</strong>和手持長笛起舞的女孩象徵著<strong>音樂</strong>。通過色彩，活力、歡樂和積極的元素被注入到壁畫中，描繪了<strong>城市的蛻變過程</strong>。
+                        </p>
+                    </div>
+                    <div class="work-tags">
+                        <span class="work-tag">自然主題</span>
+                        <span class="work-tag">蝴蝶</span>
+                        <span class="work-tag">音樂</span>
+                        <span class="work-tag">蛻變</span>
+                        <span class="work-tag">芬蘭藝術家</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 作品2：經典好萊塢傳奇 -->
+            <div class="work-row reverse fade-in-up delay-2">
+                <div class="work-content-card">
+                    <div class="work-num">02</div>
+                    <div class="work-name">經典好萊塢傳奇</div>
+                    <div class="work-artist">艾爾莎·讓·迪厄（Elsa Jean de Dieu）· 法國</div>
+                    <div class="work-desc">
+                        <p>法國藝術家艾爾莎熱愛自然，熱衷於在鄉間長跑。作為其<strong>香港工作室</strong>的創意核心，她與創意團隊為每一面牆注入活力，用創意和色彩為社區帶來視覺藝術體驗。</p>
+                        <div class="work-highlight">
+                            "瑪麗蓮·夢露與唐寶雲的肖像，黑白與色彩的強烈對話。"
+                        </div>
+                        <p>創作了諸如<strong>瑪麗蓮·夢露（Marilyn Monroe）</strong>和<strong>唐寶雲（Sally Tang
+                                Bao）</strong>等經典好萊塢傳奇人物的肖像。這些作品主要以<strong>黑白</strong>為主，背景、服飾和花朵則<strong>色彩斑斕</strong>，形成強烈對比，展現了
+                            SOHO 地區藝術與音樂帶來的歡樂與激情。</p>
+                    </div>
+                    <div class="work-tags">
+                        <span class="work-tag">好萊塢</span>
+                        <span class="work-tag">黑白肖像</span>
+                        <span class="work-tag">色彩對比</span>
+                        <span class="work-tag">SOHO</span>
+                        <span class="work-tag">法國藝術家</span>
+                    </div>
+                </div>
+                <div class="work-image-card">
+                    <img src="images/work2.png" alt="Hollywood Legends">
+                    <div class="img-overlay">
+                        <div class="img-overlay-text">Hollywood Legends</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 作品3：城市森林 -->
+            <div class="work-row fade-in-up delay-3">
+                <div class="work-image-card">
+                    <img src="images/work3.png" alt="Urban Forest">
+                    <div class="img-overlay">
+                        <div class="img-overlay-text">Urban Forest</div>
+                    </div>
+                </div>
+                <div class="work-content-card">
+                    <div class="work-num">03</div>
+                    <div class="work-name">城市森林 · Urban Forest</div>
+                    <div class="work-artist">王尼爾（Neil Wang）· 香港</div>
+                    <div class="work-desc">
+                        <p>香港本土的壁畫藝術家和插畫師，深受<strong>日本流行文化</strong>和藝術的影響。他的作品運用<strong>抽象線條、圖案、書法、色彩、拼貼</strong>等元素，創作出獨特且風格鮮明的作品。
+                        </p>
+                        <div class="work-highlight">
+                            "藝術為我們帶來愉悅的氛圍，作品與環境完美融合。"
+                        </div>
+                        <p>尼爾的作品與環境完美融合，從地面延伸至牆壁，直至空調和管道。畫中獨特的<strong>立體書法</strong>和一對來自西區的常見<strong>白鸚鵡</strong>，將我們帶入一片充滿生機與色彩的森林景觀。
+                        </p>
+                    </div>
+                    <div class="work-tags">
+                        <span class="work-tag">日本流行文化</span>
+                        <span class="work-tag">立體書法</span>
+                        <span class="work-tag">白鸚鵡</span>
+                        <span class="work-tag">拼貼</span>
+                        <span class="work-tag">香港本土</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 頁面導航 -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="exploration-route.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Exploration Route
+            </a>
+            <a href="cultural_significance.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Cultural Significance <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

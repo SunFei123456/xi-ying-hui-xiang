@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>西營盤塗鴉文化</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Index 首頁特有樣式 */
+
+        /* ===== HERO 區域 ===== */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 65vh;
+            min-height: 400px;
+            max-height: 600px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .hero-slider {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: contrast(1.1) saturate(1.2);
+            opacity: 0;
+            transition: opacity 1s ease, transform 8s ease;
+        }
+
+        .hero-image.active {
+            opacity: 1;
+        }
+
+        .hero:hover .hero-image.active {
+            transform: scale(1.05);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%);
+        }
+
+        .hero-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 32px;
+            z-index: 2;
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .brand {
+            font-family: 'Permanent Marker', cursive;
+            color: var(--text-light);
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+            line-height: 1.1;
+        }
+
+        .brand-main {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            letter-spacing: 2px;
+            display: block;
+        }
+
+        .brand-sub {
+            font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            opacity: 0.9;
+            letter-spacing: 4px;
+            margin-left: 2px;
+        }
+
+        .hero-title {
+            font-family: 'Shadows Into Light', cursive;
+            color: var(--text-light);
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            text-align: right;
+            text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.7);
+            max-width: 600px;
+            align-self: flex-end;
+            line-height: 1.2;
+            position: relative;
+        }
+
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 0;
+            width: 120px;
+            height: 3px;
+            background: var(--accent-red);
+            border-radius: 2px;
+        }
+
+        .hero-dots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.3);
+            border-color: var(--accent-red);
+        }
+
+        .dot:hover {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* ===== 標語區域 ===== */
+        .slogan-section {
+            background: var(--nav-bg);
+            padding: 10px 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .slogan-container {
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* 語言切換按鈕 */
+        .lang-switch {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .slogan-text {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            color: white;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .slogan-line {
+            width: 80px;
+            height: 3px;
+            background: var(--accent-red);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* ===== 內容區域 ===== */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px 80px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 36px 28px;
+        }
+
+        .card-wrapper {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .card-wrapper:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .card-wrapper:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .card-wrapper:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .card-wrapper:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .card-wrapper:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .card-wrapper:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-title {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            padding-left: 8px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .card-title::before {
+            content: '《';
+            color: var(--accent-red);
+            font-weight: bold;
+        }
+
+        .card-title::after {
+            content: '》';
+            color: var(--accent-red);
+            font-weight: bold;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            aspect-ratio: 1 / 0.85;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.08),
+                0 2px 4px -2px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .card-with-bg {
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-with-bg .card-inner {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
+        }
+
+        .card-with-bg .card-placeholder,
+        .card-with-bg .card-desc {
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+        }
+
+
+        .card:hover {
+            transform: translateY(-8px) rotate(0.5deg);
+            box-shadow:
+                0 20px 40px -10px rgba(0, 0, 0, 0.15),
+                0 8px 16px -8px rgba(0, 0, 0, 0.1);
+
+        }
+
+        /* 懸浮卡片的時候圖片變清晰 */
+        .card:hover .card-inner {
+            backdrop-filter: blur(0);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+        }
+
+        .card-placeholder {
+            font-family: 'Permanent Marker', cursive;
+            color: #ddd;
+            font-size: 3rem;
+            opacity: 0.3;
+            user-select: none;
+        }
+
+        .card-desc {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            color: white;
+            font-size: 0.85rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-desc {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== 響應式 ===== */
+        @media (max-width: 900px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 28px 20px;
+            }
+
+            .lang-switch {
+                position: static;
+                transform: none;
+                margin-top: 12px;
+            }
+
+            .hero {
+                height: 45vh;
+                min-height: 320px;
+            }
+
+            .hero-content {
+                padding: 16px 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .hero {
+                height: 40vh;
+                min-height: 280px;
+            }
+
+            .hero-title {
+                text-align: center;
+                align-self: center;
+                width: 100%;
+            }
+
+            .hero-title::after {
+                right: 50%;
+                transform: translateX(50%);
+            }
+
+            .hero-top {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .brand {
+                text-align: center;
+            }
+
+            .content {
+                padding: 32px 16px 60px;
+            }
+
+            .nav-item a {
+                padding: 14px 16px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ===== 裝飾元素 ===== */
+        .spray-dot {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--accent-red);
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        /* 滾動條美化 - 首頁特有 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <!-- 加載動畫 -->
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Hero 區域 -->
+    <section class="hero">
+        <div class="hero-slider">
+            <img src="images/banner1.jpg" alt="西營盤塗鴉 1" class="hero-image active" data-index="0">
+            <img src="images/banner2.jpg" alt="西營盤塗鴉 2" class="hero-image" data-index="1">
+            <img src="images/banner3.jpg" alt="西營盤塗鴉 3" class="hero-image" data-index="2">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-top">
+                <div class="brand">
+                    <span class="brand-main">GRAFFITI CULTURE</span>
+                    <span class="brand-sub">HONG KONG</span>
+                </div>
+                <h1 class="hero-title">西營盤塗鴉文化<br>The Graffiti Culture</h1>
+            </div>
+            <div class="hero-dots">
+                <span class="dot active" onclick="setSlide(0)"></span>
+                <span class="dot" onclick="setSlide(1)"></span>
+                <span class="dot" onclick="setSlide(2)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 標語區域 -->
+    <section class="slogan-section">
+        <div class="slogan-container">
+            <p class="slogan-text">探索西營盤充滿活力的街頭藝術場景</p>
+            <div class="lang-switch">
+                <a href="../en/index.html" class="lang-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M2 12h20" />
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                    English
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 內容區域 -->
+    <main class="content">
+        <div class="cards-grid">
+            <div class="card-wrapper" id="overview">
+                <div class="card-title">概覽</div>
+                <div class="card card-with-bg" onclick="window.location.href='overview.html'"
+                    style="background-image: url('images/cover1.jpg');">
+                    <div class="card-inner">
+                        <span class="card-placeholder">Art</span>
+                        <div class="card-desc">探索西營盤區街頭藝術文化的精彩概覽</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" id="background">
+                <div class="card-title">背景</div>
+                <div class="card card-with-bg" onclick="window.location.href='background.html'"
+                    style="background-image: url('images/cover2.jpg');">
+                    <div class="card-inner">
+                        <span class="card-placeholder">Hist</span>
+                        <div class="card-desc">探索香港塗鴉的歷史背景與演變</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" id="landmark">
+                <div class="card-title">藝術地標</div>
+                <div class="card card-with-bg" onclick="window.location.href='artistic_landmark.html'"
+                    style="background-image: url('images/cover3.jpg');">
+                    <div class="card-inner">
+                        <span class="card-placeholder">Icon</span>
+                        <div class="card-desc">參觀散落在社區各處的標誌性藝術地標與壁畫</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" id="route">
+                <div class="card-title">探索路線</div>
+                <div class="card card-with-bg" onclick="window.location.href='exploration-route.html'"
+                    style="background-image: url('images/cover4.jpg');">
+                    <div class="card-inner">
+                        <span class="card-placeholder">Map</span>
+                        <div class="card-desc">跟隨我們精心策劃的探索路線，體驗最佳塗鴉景點</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" id="works">
+                <div class="card-title">作品</div>
+                <div class="card card-with-bg" onclick="window.location.href='works.html'"
+                    style="background-image: url('images/cover5.png');">
+                    <div class="card-inner">
+                        <span class="card-placeholder">Gallery</span>
+                        <div class="card-desc">瀏覽本地與國際藝術家的傑出作品畫廊</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-wrapper" id="significance">
+                <div class="card-title">文化意義</div>
+                <div class="card card-with-bg" onclick="window.location.href='cultural_significance.html'"
+                    style="background-image: url('images/cover6.jpg');">
+                    <div class="card-inner">
+                        <span class="card-placeholder">Soul</span>
+                        <div class="card-desc">理解塗鴉藝術深層的文化意義與社會影響</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 頁面加載完成後隱藏 loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 400);
+        });
+
+        // 輪播功能
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-image');
+        const dots = document.querySelectorAll('.dot');
+        const totalSlides = slides.length;
+
+        function setSlide(index) {
+            // 移除當前活動狀態
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+
+            // 更新索引
+            currentSlide = index;
+
+            // 添加新的活動狀態
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            const next = (currentSlide + 1) % totalSlides;
+            setSlide(next);
+        }
+
+        // 自動輪播
+        setInterval(nextSlide, 5000);
+
+        // 卡片點擊交互
+        function openCard(card) {
+            card.style.transform = 'scale(0.96)';
+            setTimeout(() => {
+                card.style.transform = '';
+            }, 150);
+        }
+
+        // 平滑滾動
+        document.querySelectorAll('.nav-item a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const offset = 80;
+                        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // 滾動時導航高亮
+        const sections = document.querySelectorAll('.card-wrapper');
+        const navLinks = document.querySelectorAll('.nav-item a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.color = '';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.color = '#fff';
+                }
+            });
+        });
+
+        // 鼠標跟隨 spray 效果（桌面端）
+        if (window.innerWidth > 768) {
+            let lastSpray = 0;
+            document.addEventListener('mousemove', (e) => {
+                const now = Date.now();
+                if (now - lastSpray < 50) return;
+                lastSpray = now;
+
+                const dot = document.createElement('div');
+                dot.className = 'spray-dot';
+                const size = Math.random() * 6 + 2;
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+                dot.style.left = e.pageX + 'px';
+                dot.style.top = e.pageY + 'px';
+                dot.style.transform = 'translate(-50%, -50%)';
+                document.body.appendChild(dot);
+
+                setTimeout(() => {
+                    dot.remove();
+                }, 1000);
+            });
+        }
+    </script>
+</body>
+
+</html>

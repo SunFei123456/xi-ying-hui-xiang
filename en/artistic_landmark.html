@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artistic Landmark - Sai Ying Pun</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        .section-subtitle {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), transparent);
+            border-radius: 1px;
+        }
+
+        .artlane-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        /* Left White Card */
+        .artlane-info-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.06),
+                0 2px 4px -2px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+
+        .artlane-info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-card-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-dark);
+        }
+
+        .info-card-body {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.85;
+        }
+
+        .info-card-body p {
+            margin-bottom: 10px;
+        }
+
+        .info-highlight {
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+            border-left: 3px solid var(--accent-red);
+            padding: 12px 14px;
+            border-radius: 0 10px 10px 0;
+            margin: 12px 0;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            font-style: italic;
+        }
+
+        /* Right Gray Large Image Card */
+        .artlane-image-card {
+            background: var(--gray-card);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            height: 620px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transition: all 0.4s ease;
+        }
+
+        .artlane-image-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+        }
+
+        .artlane-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 6s ease;
+        }
+
+        .artlane-image-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .artlane-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 50%);
+            display: flex;
+            align-items: flex-end;
+            padding: 24px;
+        }
+
+        .artlane-image-caption {
+            color: white;
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.3rem;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ===== Core Streets Section ===== */
+        .streets-section {
+            margin-top: 48px;
+        }
+
+        .streets-subtitle {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .streets-subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), transparent);
+            border-radius: 1px;
+        }
+
+        .streets-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .street-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .street-image-box {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-light);
+            position: relative;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .street-image-box:hover {
+            transform: translateY(-6px) rotate(1deg);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .street-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 4s ease;
+        }
+
+        .street-image-box:hover img {
+            transform: scale(1.08);
+        }
+
+        .street-image-box .placeholder-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Permanent Marker', cursive;
+            color: #ddd;
+            font-size: 1.5rem;
+        }
+
+        .street-label {
+            width: 100%;
+            padding: 10px 8px;
+            background: var(--gray-card);
+            color: white;
+            text-align: center;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .street-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .street-item:hover .street-label::before {
+            left: 100%;
+        }
+
+        .street-item:hover .street-label {
+            background: var(--accent-red);
+            transform: translateY(-2px);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .artlane-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .artlane-image-card {
+                min-height: 240px;
+                order: -1;
+            }
+
+            .streets-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .section-subtitle::after,
+            .streets-subtitle::after {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .streets-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .street-label {
+                font-size: 0.8rem;
+                padding: 8px 6px;
+            }
+
+            .artlane-info-card {
+                padding: 20px;
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">Artistic Landmark</h1>
+
+        <!-- ARTLANE -->
+        <section class="artlane-section fade-in-up delay-1">
+            <div class="section-subtitle">Artlane</div>
+            <div class="artlane-grid">
+                <!-- Left Info Card -->
+                <div class="artlane-info-card">
+                    <div class="info-card-title">🎨 Sai Ying Pun Graffiti Art District</div>
+                    <div class="info-card-body">
+                        <p>Sai Ying Pun's graffiti spans across <strong>over a dozen buildings</strong>, forming a
+                            concentrated art area. Among them, <strong>"ARTLANE"</strong> is a graffiti district
+                            composed of Centre Street, Ki Ling Lane, and Shek Tong Tsui, gathering works by local and
+                            international artists.
+                        </p>
+                        <div class="info-highlight">
+                            "The vibrant colors make it a popular photo spot for tourists and residents alike."
+                        </div>
+                        <p><strong>Diverse Styles</strong>: The graffiti styles here vary greatly, from colorful,
+                            playful murals to thought-provoking works reflecting social issues.</p>
+                        <p>For example, one artist created a large-scale mural themed around a <strong>traditional Hong
+                                Kong herbal tea shop</strong>, cleverly blending tradition with modernity.</p>
+                        <p><strong>Dynamic Updates</strong>: Graffiti culture is highly time-sensitive. Some works are
+                            created during art festivals for a limited time and may later be covered by new graffiti,
+                            adding freshness and unpredictability to exploration.</p>
+                    </div>
+                </div>
+
+                <!-- Right Large Image Card -->
+                <div class="artlane-image-card">
+                    <img src="./images/index-3.jpg" alt="Artlane Graffiti">
+                    <div class="artlane-image-overlay">
+                        <div class="artlane-image-caption">ARTLANE · 艺里坊</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Streets -->
+        <section class="streets-section fade-in-up delay-2">
+            <div class="streets-subtitle">Core Graffiti Streets and Alleys</div>
+            <div class="streets-grid">
+                <div class="street-item">
+                    <div class="street-image-box">
+                        <img src="images/street1.jpg" alt="Belcher's Street">
+                    </div>
+                    <div class="street-label">Belcher's Street</div>
+                </div>
+                <div class="street-item">
+                    <div class="street-image-box">
+                        <img src="images/street2.jpg" alt="Pok Fu Lam Road">
+                    </div>
+                    <div class="street-label">Pok Fu Lam Road</div>
+                </div>
+                <div class="street-item">
+                    <div class="street-image-box">
+                        <img src="images/street3.jpg" alt="Centre Street">
+                    </div>
+                    <div class="street-label">Centre Street</div>
+                </div>
+                <div class="street-item">
+                    <div class="street-image-box">
+                        <img src="images/street4.jpg" alt="High Street">
+                    </div>
+                    <div class="street-label">High Street</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Page Navigation -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="background.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Background
+            </a>
+            <a href="exploration-route.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Exploration Route <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Works - Sai Ying Pun Graffiti</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* ===== Works Grid ===== */
+        .works-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .work-row {
+            display: grid;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .work-row.reverse {
+            grid-template-columns: 1.8fr 1fr;
+        }
+
+        /* White Image Card */
+        .work-image-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-light);
+            position: relative;
+            aspect-ratio: 1 / 1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .work-image-card:hover {
+            transform: translateY(-6px) rotate(-1deg);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .work-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 5s ease;
+        }
+
+        .work-image-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .work-image-card .img-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 50%);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .work-image-card:hover .img-overlay {
+            opacity: 1;
+        }
+
+        .img-overlay-text {
+            color: white;
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        /* White Content Card */
+        .work-content-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.06),
+                0 2px 4px -2px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .work-content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .work-num {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 2.5rem;
+            opacity: 0.08;
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            line-height: 1;
+            user-select: none;
+            color: var(--text-dark);
+        }
+
+        .work-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+            color: var(--text-dark);
+        }
+
+        .work-artist {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .work-desc {
+            font-size: 0.92rem;
+            line-height: 1.85;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        .work-desc p {
+            margin-bottom: 10px;
+        }
+
+        .work-highlight {
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+            border-left: 3px solid var(--accent-red);
+            padding: 10px 14px;
+            border-radius: 0 10px 10px 0;
+            margin: 10px 0;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .work-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .work-tag {
+            padding: 4px 12px;
+            background: #f5f5f5;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s;
+            cursor: default;
+            color: var(--text-muted);
+        }
+
+        .work-tag:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+
+            .work-row,
+            .work-row.reverse {
+                grid-template-columns: 1fr;
+            }
+
+            .work-image-card {
+                aspect-ratio: 1 / 1;
+                order: -1;
+            }
+
+            .work-content-card {
+                padding: 24px 20px;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .work-name {
+                font-size: 1.1rem;
+            }
+
+            .work-num {
+                font-size: 2rem;
+                top: 8px;
+                right: 12px;
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">Works</h1>
+
+        <div class="works-grid">
+            <!-- Work 1: Metamorphosis -->
+            <div class="work-row fade-in-up delay-1">
+                <div class="work-image-card">
+                    <img src="images/work1.png" alt="Metamorphosis">
+                    <div class="img-overlay">
+                        <div class="img-overlay-text">Metamorphosis</div>
+                    </div>
+                </div>
+                <div class="work-content-card">
+                    <div class="work-num">01</div>
+                    <div class="work-name">Metamorphosis · 蜕变</div>
+                    <div class="work-artist">Riitta Kuisma · Finland</div>
+                    <div class="work-desc">
+                        <p>This Finnish artist is renowned for her murals and portraits. Most of her works focus on
+                            <strong>nature</strong>, exploring the interaction between humans and nature. Her works can
+                            be found in public spaces and private collections across North America, Europe, and Asia.
+                        </p>
+                        <div class="work-highlight">
+                            "The three murals are inspired by 'metamorphosis,' complementing each other."
+                        </div>
+                        <p>The splashed paint on the walls and the train on the ground represent rich artistic elements.
+                            The colorful <strong>butterflies</strong> and the girl dancing with a flute symbolize
+                            <strong>music</strong>. Through color, elements of vitality, joy, and positivity are infused
+                            into the murals, depicting the <strong>city's transformation process</strong>.
+                        </p>
+                    </div>
+                    <div class="work-tags">
+                        <span class="work-tag">Nature Theme</span>
+                        <span class="work-tag">Butterfly</span>
+                        <span class="work-tag">Music</span>
+                        <span class="work-tag">Metamorphosis</span>
+                        <span class="work-tag">Finnish Artist</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work 2: Classic Hollywood Legends -->
+            <div class="work-row reverse fade-in-up delay-2">
+                <div class="work-content-card">
+                    <div class="work-num">02</div>
+                    <div class="work-name">Classic Hollywood Legends</div>
+                    <div class="work-artist">Elsa Jean de Dieu · France</div>
+                    <div class="work-desc">
+                        <p>French artist Elsa loves nature and enjoys long runs in the countryside. As the creative core
+                            of her <strong>Hong Kong studio</strong>, she and her creative team inject vitality into
+                            every wall, bringing visual art experiences to the community through creativity and color.
+                        </p>
+                        <div class="work-highlight">
+                            "Portraits of Marilyn Monroe and Sally Tang Bao, a strong dialogue between black-and-white
+                            and color."
+                        </div>
+                        <p>She created portraits of classic Hollywood legends such as <strong>Marilyn Monroe</strong>
+                            and <strong>Sally Tang Bao</strong>. These works are primarily in <strong>black and
+                                white</strong>, with colorful backgrounds, clothing, and flowers creating a strong
+                            contrast, showcasing the joy and passion brought by art and music in the SOHO district.</p>
+                    </div>
+                    <div class="work-tags">
+                        <span class="work-tag">Hollywood</span>
+                        <span class="work-tag">B&W Portrait</span>
+                        <span class="work-tag">Color Contrast</span>
+                        <span class="work-tag">SOHO</span>
+                        <span class="work-tag">French Artist</span>
+                    </div>
+                </div>
+                <div class="work-image-card">
+                    <img src="images/work2.png" alt="Hollywood Legends">
+                    <div class="img-overlay">
+                        <div class="img-overlay-text">Hollywood Legends</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work 3: Urban Forest -->
+            <div class="work-row fade-in-up delay-3">
+                <div class="work-image-card">
+                    <img src="images/work3.png" alt="Urban Forest">
+                    <div class="img-overlay">
+                        <div class="img-overlay-text">Urban Forest</div>
+                    </div>
+                </div>
+                <div class="work-content-card">
+                    <div class="work-num">03</div>
+                    <div class="work-name">Urban Forest · 城市森林</div>
+                    <div class="work-artist">Neil Wang · Hong Kong</div>
+                    <div class="work-desc">
+                        <p>A Hong Kong-based mural artist and illustrator, deeply influenced by <strong>Japanese pop
+                                culture</strong> and art. His works use elements such as <strong>abstract lines,
+                                patterns, calligraphy, color, and collage</strong> to create unique and distinctive
+                            pieces.
+                        </p>
+                        <div class="work-highlight">
+                            "Art brings us a pleasant atmosphere, with works perfectly integrated into the environment."
+                        </div>
+                        <p>Neil's works blend perfectly with the environment, extending from the ground to the walls,
+                            even covering air conditioners and pipes. The unique <strong>three-dimensional
+                                calligraphy</strong> in the painting and a pair of common <strong>white parrots</strong>
+                            from the Western District transport us into a vibrant and colorful forest landscape.
+                        </p>
+                    </div>
+                    <div class="work-tags">
+                        <span class="work-tag">Japanese Pop Culture</span>
+                        <span class="work-tag">3D Calligraphy</span>
+                        <span class="work-tag">White Parrots</span>
+                        <span class="work-tag">Collage</span>
+                        <span class="work-tag">Hong Kong Local</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="exploration-route.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Exploration Route
+            </a>
+            <a href="cultural_significance.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Cultural Significance <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

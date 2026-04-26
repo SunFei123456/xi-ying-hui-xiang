@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>探索路線 - 西營盤</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Exploration Route 頁面特有樣式 */
+        .top-nav {
+            z-index: 500;
+        }
+
+
+
+
+
+        /* Exploration Route 頁面特有樣式 */
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-red);
+            border-radius: 2px;
+        }
+
+        /* ===== Map 卡片 ===== */
+        .map-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-light);
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .map-label {
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 24px;
+            border-radius: 24px;
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            z-index: 400;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            letter-spacing: 1px;
+        }
+
+        #map2d {
+            width: 100%;
+            height: 380px;
+            z-index: 1;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: #fafafa;
+            border-top: 1px solid #f0f0f0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .map-controls::-webkit-scrollbar {
+            display: none;
+        }
+
+        .route-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            background: white;
+            color: var(--text-muted);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .route-chip:hover {
+            transform: translateY(-2px);
+        }
+
+        .route-chip.active {
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .route-chip.r1.active {
+            background: var(--accent-red);
+        }
+
+        .route-chip.r2.active {
+            background: #e67e22;
+        }
+
+        .route-chip.r3.active {
+            background: #27ae60;
+        }
+
+        /* ===== 時間軸 ===== */
+        .timeline-section {
+            position: relative;
+            margin-bottom: 36px;
+            padding: 0 8px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 28px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), #e67e22, #27ae60);
+            z-index: 1;
+        }
+
+        .timeline-line::after {
+            content: '→';
+            position: absolute;
+            right: -4px;
+            top: -10px;
+            color: #27ae60;
+            font-size: 1rem;
+        }
+
+        .timeline-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .t-dot {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--accent-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover .t-dot {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .t-pill {
+            padding: 10px 18px;
+            background: var(--gray-card);
+            color: white;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .timeline-item:hover .t-pill {
+            background: var(--accent-red);
+            transform: translateX(4px);
+        }
+
+        /* ===== 選擇模式 ===== */
+        .mode-section {
+            margin-bottom: 32px;
+        }
+
+        .mode-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .mode-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 18px 24px;
+            border-radius: 16px;
+            border: 2px solid var(--border-light);
+            background: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .mode-btn:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .mode-btn.primary {
+            background: linear-gradient(135deg, var(--accent-red), #e74c3c);
+            color: white;
+            border-color: transparent;
+        }
+
+        .mode-btn.primary:hover {
+            background: linear-gradient(135deg, #a93226, #c0392b);
+            color: white;
+        }
+
+        /* ===== 測試題 ===== */
+        .quiz-section {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-light);
+            display: none;
+        }
+
+        .quiz-section.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quiz-title {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .quiz-progress {
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-red), #e74c3c);
+            border-radius: 2px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+
+        .question-block {
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .question-block:last-of-type {
+            border-bottom: none;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 14px;
+            color: var(--text-dark);
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            background: #fafafa;
+            cursor: pointer;
+            transition: all 0.25s;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option::before {
+            content: '';
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            flex-shrink: 0;
+            transition: all 0.25s;
+        }
+
+        .option:hover {
+            border-color: var(--accent-red);
+            background: #fff5f5;
+        }
+
+        .option.selected {
+            border-color: var(--accent-red);
+            background: #fdf2f2;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .option.selected::before {
+            background: var(--accent-red);
+            border-color: var(--accent-red);
+            box-shadow: inset 0 0 0 3px white;
+        }
+
+        .quiz-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-red), #e74c3c);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+
+        .quiz-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(192, 57, 43, 0.3);
+        }
+
+        /* ===== 推薦結果 ===== */
+        .result-section {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-light);
+            display: none;
+        }
+
+        .result-section.show {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .result-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--accent-red), #e74c3c);
+            color: white;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .result-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result-desc {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .result-routes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .result-main {
+            grid-column: 1 / -1;
+        }
+
+        .result-card {
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid #eee;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .result-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-card.main {
+            border-color: var(--accent-red);
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+        }
+
+        .result-card .r-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-card .r-tag {
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-muted);
+        }
+
+        .result-card .r-info {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* ===== 路線卡片列表 ===== */
+        .routes-list {
+            display: none;
+            margin-bottom: 28px;
+        }
+
+        .routes-list.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .route-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .route-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--accent-red);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .route-card:hover {
+            transform: translateX(6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .route-card:hover::before {
+            opacity: 1;
+        }
+
+        .route-card.r2::before {
+            background: #e67e22;
+        }
+
+        .route-card.r3::before {
+            background: #27ae60;
+        }
+
+        .route-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .route-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .route-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: #f5f5f5;
+            padding: 4px 12px;
+            border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        .route-theme {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .route-spots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .route-spot-tag {
+            padding: 4px 12px;
+            background: #f8f8f8;
+            border-radius: 16px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            border: 1px solid #eee;
+        }
+
+        /* ===== Main exploration route 標題 ===== */
+        .section-subtitle {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            color: var(--text-dark);
+            margin: 40px 0 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), transparent);
+            border-radius: 1px;
+        }
+
+        /* ===== 3D地圖區（灰色大圖卡+波浪） ===== */
+        .map3d-section {
+            position: relative;
+            margin-bottom: 28px;
+        }
+
+        .map3d-card {
+            background: var(--gray-card);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .map3d-header {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            z-index: 400;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 8px 18px;
+            border-radius: 20px;
+            color: white;
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        #map3d {
+            width: 100%;
+            height: 380px;
+            filter: contrast(1.1);
+        }
+
+
+
+
+        /* 機位彈窗 */
+        .spot-popup {
+            min-width: 220px;
+        }
+
+        .spot-popup h4 {
+            font-family: 'Noto Serif SC', serif;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .spot-popup p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .spot-popup img {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 6px;
+        }
+
+        /* ===== 底部白色大卡片 ===== */
+        .bottom-card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-light);
+            display: none;
+        }
+
+        .bottom-card.show {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .detail-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .detail-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            padding: 6px 14px;
+            background: #f5f5f5;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-spots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .detail-spot {
+            padding: 16px;
+            background: #fafafa;
+            border-radius: 14px;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .detail-spot:hover {
+            border-color: var(--accent-red);
+            background: #fffafa;
+            transform: translateY(-3px);
+        }
+
+        .detail-spot h5 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+
+        .detail-spot p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* 上傳區 */
+        .upload-section {
+            border-top: 2px dashed #eee;
+            padding-top: 24px;
+            margin-top: 24px;
+        }
+
+        .upload-title {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent-red);
+            background: #fff5f5;
+        }
+
+        .upload-area input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .upload-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .upload-preview img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #eee;
+        }
+
+        /* 動畫 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 自定義標記樣式 */
+        .custom-marker {
+            background: var(--accent-red);
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border: 2px solid white;
+        }
+
+        .camera-marker {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 2px solid white;
+        }
+
+        /* 響應式 */
+        @media (max-width: 768px) {
+            .map-label {
+                font-size: 1.1rem;
+                padding: 6px 16px;
+            }
+
+            #map2d,
+            #map3d {
+                height: 280px;
+            }
+
+            .mode-btn {
+                min-width: 100%;
+            }
+
+            .result-routes {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-spots {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .timeline-line {
+                display: none;
+            }
+
+            .t-pill {
+                font-size: 0.8rem;
+                padding: 8px 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading 動畫 -->
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- 頂部導航 -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="index.html" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                返回
+            </a>
+            <div class="nav-brand">探索路線</div>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- 主內容 -->
+    <main class="main-container">
+        <h1 class="page-title">探索路線</h1>
+
+        <!-- Map 卡片 -->
+        <div class="map-card">
+            <div class="map-label">🗺️ 西營盤塗鴉地圖</div>
+            <div id="map2d"></div>
+            <div class="map-controls">
+                <button class="route-chip r1 active" onclick="selectRoute('route1')">路線1：PMQ深度漫遊</button>
+                <button class="route-chip r2" onclick="selectRoute('route2')">路線2：地鐵快捷打卡</button>
+                <button class="route-chip r3" onclick="selectRoute('route3')">路線3：高街本地生活</button>
+            </div>
+        </div>
+
+        <!-- 時間軸 -->
+        <div class="timeline-section">
+            <div class="timeline-line"></div>
+            <div class="timeline-rows" id="timelineRows">
+                <!-- JS 動態生成 -->
+            </div>
+        </div>
+
+        <!-- 選擇模式 -->
+        <div class="mode-section">
+            <div class="mode-title">選擇你的探索模式</div>
+            <div class="mode-buttons">
+                <button class="mode-btn primary" onclick="showDirectRoutes()">📍 直接瀏覽三條路線</button>
+                <button class="mode-btn" onclick="showQuiz()">🎯 測試題智能推薦</button>
+            </div>
+        </div>
+
+        <!-- 測試題區域 -->
+        <div class="quiz-section" id="quizSection">
+            <div class="quiz-title">📝 發現你的專屬路線</div>
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" id="quizProgress"></div>
+            </div>
+            <div id="quizQuestions"></div>
+            <button class="quiz-submit" onclick="calculateResult()">查看推薦路線</button>
+        </div>
+
+        <!-- 推薦結果 -->
+        <div class="result-section" id="resultSection">
+            <div class="result-badge" id="resultBadge"></div>
+            <div class="result-title" id="resultTitle"></div>
+            <div class="result-desc" id="resultDesc"></div>
+            <div class="result-routes" id="resultRoutes"></div>
+        </div>
+
+        <!-- 路線列表 -->
+        <div class="routes-list" id="routesList"></div>
+
+        <!-- 路線詳情卡片 -->
+        <div class="bottom-card" id="bottomCard">
+            <div class="detail-header">
+                <div class="detail-title" id="detailTitle">路線詳情</div>
+                <div class="detail-meta" id="detailMeta"></div>
+            </div>
+            <div class="detail-spots" id="detailSpots"></div>
+
+            <div class="upload-title">📷 遊客打卡照片上傳</div>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <input type="file" id="fileInput" multiple accept="image/*" onchange="handleUpload(event)">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">點擊或拖拽上傳你的打卡照片<br><small>支持 JPG、PNG 格式</small></div>
+            </div>
+            <div class="upload-preview" id="uploadPreview"></div>
+        </div>
+
+        <!-- 3D 地圖區 -->
+        <div class="map3d-section">
+            <div class="map3d-card">
+                <div class="map3d-header">📸 攝影師推薦打卡點</div>
+                <div id="map3d"></div>
+            </div>
+        </div>
+
+        <!-- 頁面導航 -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="artistic_landmark.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Artistic Landmark
+            </a>
+            <a href="works.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Works <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ================= 數據 =================
+        const spots = {
+            pmq: { name: "PMQ", lat: 22.2835, lng: 114.1520, type: "art", desc: "文創地標，舊警察宿舍改造", img: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?q=80&w=400&auto=format&fit=crop" },
+            saiYingPunSt: { name: "西營盤街", lat: 22.2860, lng: 114.1420, type: "street", desc: "老街探索，感受歷史肌理", img: "https://images.unsplash.com/photo-1536599018102-9f803c140fc1?q=80&w=400&auto=format&fit=crop" },
+            easternSt: { name: "東邊街", lat: 22.2862, lng: 114.1432, type: "street", desc: "塗鴉小巷，色彩繽紛", img: "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?q=80&w=400&auto=format&fit=crop" },
+            stoneLane: { name: "石棧里/奇靈里", lat: 22.2863, lng: 114.1431, type: "art", desc: "ARTLANE 塗鴉集中地", img: "https://images.unsplash.com/photo-1561059488-916d69792237?q=80&w=400&auto=format&fit=crop" },
+            rainbowStairs: { name: "彩虹樓梯", lat: 22.2854, lng: 114.1428, type: "art", desc: "西營盤站B3出口，色彩斑斕的打卡聖地", img: "https://images.unsplash.com/photo-1551913902-c92207136625?q=80&w=400&auto=format&fit=crop" },
+            graffiti: { name: "小眾塗鴉牆", lat: 22.2863, lng: 114.1431, type: "art", desc: "ARTLANE隱藏作品，動態更新", img: "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?q=80&w=400&auto=format&fit=crop" },
+            winston: { name: "Winston Coffee", lat: 22.2862, lng: 114.1422, type: "cafe", desc: "網紅咖啡店，出片率高", img: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=400&auto=format&fit=crop" },
+            highSt: { name: "高街", lat: 22.2865, lng: 114.1430, type: "history", desc: "復古街道與歷史建築", img: "https://images.unsplash.com/photo-1533158307587-828f0a76ef93?q=80&w=400&auto=format&fit=crop" },
+            mainSt: { name: "正街", lat: 22.2860, lng: 114.1425, type: "street", desc: "香港最陡街道，縱深感絕佳", img: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=400&auto=format&fit=crop" },
+            market: { name: "西營盤街市", lat: 22.2860, lng: 114.1420, type: "local", desc: "本地市集，煙火氣十足", img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=400&auto=format&fit=crop" },
+            alley: { name: "寧靜小巷", lat: 22.2858, lng: 114.1418, type: "local", desc: "社區深處，安靜小眾", img: "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?q=80&w=400&auto=format&fit=crop" },
+            westernCenter: { name: "西區社區中心", lat: 22.2865, lng: 114.1425, type: "history", desc: "前善言醫院，法定古蹟", img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=400&auto=format&fit=crop" },
+            thirdSt: { name: "第三街", lat: 22.2855, lng: 114.1415, type: "street", desc: "本地生活街", img: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=400&auto=format&fit=crop" },
+            waterSt: { name: "水街", lat: 22.2850, lng: 114.1410, type: "street", desc: "傳統街區", img: "https://images.unsplash.com/photo-1519999482648-25049ddd37b1?q=80&w=400&auto=format&fit=crop" },
+            buji: { name: "不羈時咖啡", lat: 22.2858, lng: 114.1418, type: "cafe", desc: "獨立咖啡館，社區氛圍", img: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=400&auto=format&fit=crop" },
+            hkumuseum: { name: "港大美術博物館", lat: 22.2839, lng: 114.1392, type: "extend", desc: "香港大學內，學術藝術", img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=400&auto=format&fit=crop" },
+            kennedy: { name: "西環泳棚", lat: 22.2815, lng: 114.1260, type: "extend", desc: "堅尼地城海邊，日落絕美", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=400&auto=format&fit=crop" }
+        };
+
+        const routes = {
+            route1: {
+                name: "路線1：PMQ深度漫遊",
+                short: "PMQ深度漫遊",
+                theme: "文藝深度、慢逛、歷史+藝術、老街區探索",
+                time: "約1.5-2小時",
+                transport: "地鐵至上環站，後步行",
+                spots: ["pmq", "saiYingPunSt", "easternSt", "stoneLane"],
+                path: [[22.2835, 114.1520], [22.2860, 114.1420], [22.2862, 114.1432], [22.2863, 114.1431]],
+                color: "#c0392b",
+                type: "A",
+                desc: "從創意空間PMQ出發，穿越西營盤老街，最終抵達塗鴉小巷。層次最豐富，適合深度體驗歷史與藝術的交融。"
+            },
+            route2: {
+                name: "路線2：地鐵快捷打卡",
+                short: "地鐵快捷打卡",
+                theme: "輕量打卡、出片、省時、咖啡+小眾塗鴉",
+                time: "約30分鐘",
+                transport: "港島線西營盤站B3出口",
+                spots: ["rainbowStairs", "graffiti", "winston"],
+                path: [[22.2854, 114.1428], [22.2863, 114.1431], [22.2862, 114.1422]],
+                color: "#e67e22",
+                type: "B",
+                desc: "追求高效出片、輕鬆不累，全程順路不繞，30分鐘搞定高顏值打卡點。"
+            },
+            route3: {
+                name: "路線3：高街本地生活",
+                short: "高街本地生活",
+                theme: "安靜小眾、本地氛圍、歷史建築、社區感",
+                time: "約40分鐘",
+                transport: "步行",
+                spots: ["highSt", "mainSt", "market", "alley"],
+                path: [[22.2865, 114.1430], [22.2860, 114.1425], [22.2860, 114.1420], [22.2858, 114.1418]],
+                color: "#27ae60",
+                type: "C",
+                desc: "人少景美，充滿西營盤真實社區味道，適合偏愛安靜、本地、不擁擠氛圍的旅行者。"
+            }
+        };
+
+        const photoSpots = [
+            { name: "彩虹樓梯俯拍", lat: 22.2854, lng: 114.1428, tip: "站在樓梯上方往下拍，色彩層次最佳", icon: "📷" },
+            { name: "正街陡坡縱深感", lat: 22.2860, lng: 114.1425, tip: "低角度仰拍，捕捉街道縱深感與遠處海景", icon: "📸" },
+            { name: "高街建築框景", lat: 22.2865, lng: 114.1430, tip: "利用拱形門框拍攝遠處維多利亞港", icon: "🎞️" },
+            { name: "ARTLANE壁畫合影", lat: 22.2863, lng: 114.1431, tip: "側光拍攝，壁畫色彩更飽和，上午光線最佳", icon: "📷" },
+            { name: "PMQ中庭對稱構圖", lat: 22.2835, lng: 114.1520, tip: "中庭仰拍，建築線條感強，黑白對比強烈", icon: "📸" }
+        ];
+
+        const quizData = [
+            {
+                q: "你去旅行最在意的是？",
+                options: [
+                    { text: "慢慢逛，感受老街區故事與歷史氛圍", type: "A" },
+                    { text: "快速出片、打卡好看點位，不浪費時間", type: "B" },
+                    { text: "安靜小眾，避開人潮，體驗本地真實生活", type: "C" }
+                ]
+            },
+            {
+                q: "你能接受的步行時長？",
+                options: [
+                    { text: "輕鬆漫遊，1小時左右，慢慢看", type: "A" },
+                    { text: "30分鐘內，高效走完核心點", type: "B" },
+                    { text: "30–40分鐘，舒服不趕，順路感受社區", type: "C" }
+                ]
+            },
+            {
+                q: "你最喜歡的旅行節奏？",
+                options: [
+                    { text: "深度探索", type: "A" },
+                    { text: "輕快打卡", type: "B" },
+                    { text: "安靜體驗", type: "C" }
+                ]
+            },
+            {
+                q: "你更偏愛哪種氛圍？",
+                options: [
+                    { text: "文藝創意、新舊交融、有故事感", type: "A" },
+                    { text: "潮流年輕、出片率高、網紅感輕打卡", type: "B" },
+                    { text: "寧靜本地、社區氣息、人少不擁擠", type: "C" }
+                ]
+            },
+            {
+                q: "你旅行的核心目的是？",
+                options: [
+                    { text: "了解文化與歷史，沉浸式體驗", type: "A" },
+                    { text: "拍好看照片，發社交平台", type: "B" },
+                    { text: "放鬆閒逛，找安靜又有特色的地方", type: "C" }
+                ]
+            }
+        ];
+
+        // ================= 狀態 =================
+        let map2d, map3d;
+        let currentRoute = 'route1';
+        let routeLayers = [];
+        let quizAnswers = {};
+
+        // ================= 初始化 =================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 500);
+            initMaps();
+            renderTimeline('route1');
+        });
+
+        function initMaps() {
+            // 2D Map
+            map2d = L.map('map2d', { zoomControl: false }).setView([22.2855, 114.1420], 16);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap',
+                maxZoom: 19
+            }).addTo(map2d);
+            L.control.zoom({ position: 'bottomright' }).addTo(map2d);
+
+            // 3D Map (亮色主題)
+            map3d = L.map('map3d', { zoomControl: false, dragging: true, scrollWheelZoom: true }).setView([22.2855, 114.1420], 16);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; CartoDB',
+                maxZoom: 19
+            }).addTo(map3d);
+
+            // 添加機位標記到3D地圖
+            photoSpots.forEach((spot, i) => {
+                const marker = L.divIcon({
+                    className: 'camera-marker',
+                    html: spot.icon,
+                    iconSize: [36, 36],
+                    iconAnchor: [18, 18]
+                });
+                const m = L.marker([spot.lat, spot.lng], { icon: marker }).addTo(map3d);
+                m.bindPopup(`
+                    <div class="spot-popup">
+                        <h4>${spot.icon} ${spot.name}</h4>
+                        <p>${spot.tip}</p>
+                        <small style="color:#999">推薦機位 #${i + 1}</small>
+                    </div>
+                `);
+            });
+
+            // 默認加載路線1
+            loadRouteToMap('route1');
+        }
+
+        // ================= 路線邏輯 =================
+        function loadRouteToMap(routeId) {
+            // 清除舊層
+            routeLayers.forEach(l => map2d.removeLayer(l));
+            routeLayers = [];
+
+            const r = routes[routeId];
+            if (!r) return;
+
+            // 畫線
+            const polyline = L.polyline(r.path, {
+                color: r.color,
+                weight: 5,
+                opacity: 0.8,
+                dashArray: '10, 8',
+                lineCap: 'round'
+            }).addTo(map2d);
+            routeLayers.push(polyline);
+
+            // 標記點
+            r.spots.forEach((sid, idx) => {
+                const s = spots[sid];
+                if (!s) return;
+                const icon = L.divIcon({
+                    className: 'custom-marker',
+                    html: (idx + 1).toString(),
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 16]
+                });
+                const m = L.marker([s.lat, s.lng], { icon }).addTo(map2d);
+                m.bindPopup(`<b>${s.name}</b><br>${s.desc}`);
+                routeLayers.push(m);
+            });
+
+            // 適應視野
+            map2d.fitBounds(polyline.getBounds(), { padding: [40, 40] });
+        }
+
+        function selectRoute(routeId) {
+            currentRoute = routeId;
+            document.querySelectorAll('.route-chip').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.route-chip.${routeId === 'route1' ? 'r1' : routeId === 'route2' ? 'r2' : 'r3'}`)?.classList.add('active');
+            loadRouteToMap(routeId);
+            renderTimeline(routeId);
+            showRouteDetail(routeId);
+        }
+
+        function showAllSpots() {
+            routeLayers.forEach(l => map2d.removeLayer(l));
+            routeLayers = [];
+            const group = [];
+            Object.values(spots).forEach(s => {
+                const m = L.marker([s.lat, s.lng]).addTo(map2d);
+                m.bindPopup(`<b>${s.name}</b><br>${s.desc}`);
+                routeLayers.push(m);
+                group.push([s.lat, s.lng]);
+            });
+            if (group.length) map2d.fitBounds(group, { padding: [50, 50] });
+        }
+
+        function renderTimeline(routeId) {
+            const r = routes[routeId];
+            const container = document.getElementById('timelineRows');
+            let html = '<div class="timeline-row">';
+            r.spots.forEach((sid, i) => {
+                const s = spots[sid];
+                html += `
+                    <div class="timeline-item" onclick="flyToSpot('${sid}')">
+                        <div class="t-dot">${i + 1}</div>
+                        <div class="t-pill">${s.name}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function flyToSpot(sid) {
+            const s = spots[sid];
+            if (s) map2d.flyTo([s.lat, s.lng], 18, { duration: 1.5 });
+        }
+
+        // ================= 模式切換 =================
+        function showDirectRoutes() {
+            hideAllSections();
+            const list = document.getElementById('routesList');
+            list.classList.add('show');
+            list.innerHTML = Object.values(routes).map((r, i) => `
+                <div class="route-card r${i + 1}" onclick="selectRoute('route${i + 1}')">
+                    <div class="route-header">
+                        <div class="route-name">${r.name}</div>
+                        <div class="route-time">⏱ ${r.time}</div>
+                    </div>
+                    <div class="route-theme">${r.theme}</div>
+                    <div class="route-spots">
+                        ${r.spots.map(sid => `<span class="route-spot-tag">${spots[sid].name}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+            // 默認選中第一條
+            selectRoute('route1');
+        }
+
+        function showQuiz() {
+            hideAllSections();
+            const qs = document.getElementById('quizSection');
+            qs.classList.add('show');
+            renderQuiz();
+        }
+
+        function hideAllSections() {
+            document.getElementById('routesList').classList.remove('show');
+            document.getElementById('quizSection').classList.remove('show');
+            document.getElementById('resultSection').classList.remove('show');
+        }
+
+        // ================= 測試題 =================
+        function renderQuiz() {
+            const container = document.getElementById('quizQuestions');
+            container.innerHTML = quizData.map((q, qi) => `
+                <div class="question-block" data-idx="${qi}">
+                    <div class="question-text">${qi + 1}. ${q.q}</div>
+                    <div class="options">
+                        ${q.options.map((opt, oi) => `
+                            <div class="option" onclick="selectOption(${qi}, '${opt.type}', this)">
+                                ${opt.text}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+            updateProgress();
+        }
+
+        function selectOption(qIdx, type, el) {
+            quizAnswers[qIdx] = type;
+            const block = el.closest('.question-block');
+            block.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const pct = (Object.keys(quizAnswers).length / quizData.length) * 100;
+            document.getElementById('quizProgress').style.width = pct + '%';
+        }
+
+        function calculateResult() {
+            if (Object.keys(quizAnswers).length < quizData.length) {
+                alert('請先回答所有問題');
+                return;
+            }
+            const counts = { A: 0, B: 0, C: 0 };
+            Object.values(quizAnswers).forEach(t => counts[t]++);
+            let maxType = 'A';
+            if (counts.B > counts[maxType]) maxType = 'B';
+            if (counts.C > counts[maxType]) maxType = 'C';
+
+            const resultMap = {
+                A: { title: "文藝深度漫遊家", main: "route1", sub: "route3", badge: "🎨 文藝深度漫遊家" },
+                B: { title: "潮流輕打卡達人", main: "route2", sub: "route1", badge: "📸 潮流輕打卡達人" },
+                C: { title: "安靜小眾探索者", main: "route3", sub: "route2", badge: "🌿 安靜小眾探索者" }
+            };
+            const res = resultMap[maxType];
+            const mainR = routes[res.main];
+            const subR = routes[res.sub];
+
+            document.getElementById('resultBadge').textContent = res.badge;
+            document.getElementById('resultTitle').textContent = `你的旅行人格：${res.title}`;
+            document.getElementById('resultDesc').textContent = mainR.desc;
+            document.getElementById('resultRoutes').innerHTML = `
+                <div class="result-card main" onclick="selectRoute('${res.main}')">
+                    <div class="r-name">⭐ 主推：${mainR.name}</div>
+                    <span class="r-tag">${mainR.time}</span>
+                    <div class="r-info">${mainR.theme}<br><br>交通：${mainR.transport}</div>
+                </div>
+                <div class="result-card" onclick="selectRoute('${res.sub}')">
+                    <div class="r-name">💡 副推：${subR.name}</div>
+                    <span class="r-tag">${subR.time}</span>
+                    <div class="r-info">${subR.theme}</div>
+                </div>
+            `;
+
+            document.getElementById('quizSection').classList.remove('show');
+            document.getElementById('resultSection').classList.add('show');
+        }
+
+        // 顯示路線詳情
+        function showRouteDetail(routeId) {
+            const r = routes[routeId];
+            const card = document.getElementById('bottomCard');
+            card.classList.add('show');
+
+            document.getElementById('detailTitle').textContent = r.name;
+            document.getElementById('detailMeta').innerHTML = `
+                <span class="meta-tag">⏱ ${r.time}</span>
+                <span class="meta-tag">🚇 ${r.transport}</span>
+            `;
+
+            document.getElementById('detailSpots').innerHTML = r.spots.map(sid => {
+                const s = spots[sid];
+                return `
+                    <div class="detail-spot" onclick="flyToSpot('${sid}')">
+                        <h5>${s.name}</h5>
+                        <p>${s.desc}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 照片上傳處理
+        function handleUpload(e) {
+            const files = e.target.files;
+            const preview = document.getElementById('uploadPreview');
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+</body>
+
+</html>

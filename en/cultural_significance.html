@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultural Significance - Sai Ying Pun</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* ===== Cards List ===== */
+        .cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .significance-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.06),
+                0 2px 4px -2px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-dark);
+            cursor: pointer;
+        }
+
+        .significance-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-num {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 3rem;
+            opacity: 0.08;
+            color: var(--text-dark);
+            position: absolute;
+            top: 8px;
+            right: 24px;
+            line-height: 1;
+            user-select: none;
+            transition: all 0.4s ease;
+        }
+
+        .significance-card:hover .card-num {
+            opacity: 0.15;
+            transform: scale(1.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-red), #e74c3c);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .card-title-text {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .card-body {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-body p {
+            margin-bottom: 10px;
+        }
+
+        .card-highlight {
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+            border-left: 3px solid var(--accent-red);
+            padding: 12px 16px;
+            border-radius: 0 12px 12px 0;
+            margin: 12px 0;
+            font-style: italic;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-tag {
+            padding: 5px 14px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s;
+            cursor: default;
+            color: var(--text-muted);
+        }
+
+        .card-tag:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .significance-card {
+                padding: 24px 20px;
+            }
+
+            .card-num {
+                font-size: 2.2rem;
+                right: 16px;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-title-text {
+                font-size: 1.05rem;
+            }
+
+            .card-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">Cultural Significance</h1>
+
+        <div class="cards-list">
+            <!-- Card 1: Introduction -->
+            <div class="significance-card fade-in-up delay-1">
+                <div class="card-num">01</div>
+                <div class="card-header">
+                    <div class="card-icon">🌐</div>
+                    <div class="card-title-text">The Intersection of Multiple Cultural Meanings</div>
+                </div>
+                <div class="card-body">
+                    <p>The graffiti culture in Sai Ying Pun, Hong Kong, holds multiple cultural significances as a
+                        <strong>carrier of urban memory</strong>, a <strong>medium for community
+                            revitalization</strong>, and a <strong>space for multicultural dialogue</strong>.
+                    </p>
+                    <p>According to the latest publicly available information as of March 2026, the graffiti art in this
+                        neighborhood has transcended mere visual decoration, becoming a cultural node connecting history
+                        with contemporary times, official with grassroots, and local with global.</p>
+                    <div class="card-highlight">
+                        "Graffiti is not simply 'vandalism,' but rather injects new narratives into spaces such as old
+                        building exteriors, iron gates, and stair corners."
+                    </div>
+                </div>
+                <div class="card-tags">
+                    <span class="card-tag">Urban Memory</span>
+                    <span class="card-tag">Community Revitalization</span>
+                    <span class="card-tag">Cultural Dialogue</span>
+                </div>
+            </div>
+
+            <!-- Card 2: Interweaving of History and Contemporary -->
+            <div class="significance-card fade-in-up delay-2">
+                <div class="card-num">02</div>
+                <div class="card-header">
+                    <div class="card-icon">🏛️</div>
+                    <div class="card-title-text">Interweaving of History and Contemporary</div>
+                </div>
+                <div class="card-body">
+                    <p>Sai Ying Pun is a historic neighborhood in the Central and Western District of Hong Kong Island,
+                        preserving numerous <strong>old-style shops, traditional markets, and vintage tenement
+                            buildings</strong>. Graffiti art has injected new vitality into this old district, creating
+                        a symbiotic landscape of "vitality and trendiness."
+                    </p>
+                    <div class="card-highlight">
+                        "The 'Stories of Our City Gates' community art project launched in 2016 invited artists to
+                        create graffiti on iron gates based on oral histories of local shops, allowing craft heritage
+                        and human stories to be visually presented."
+                    </div>
+                    <p>These works not only beautify the neighborhood but also give new life to the skills and memories
+                        of the older generation through the artistic language of young people, achieving
+                        <strong>cross-generational cultural transmission</strong>.</p>
+                </div>
+                <div class="card-tags">
+                    <span class="card-tag">City Gates Stories</span>
+                    <span class="card-tag">Oral History</span>
+                    <span class="card-tag">Craft Heritage</span>
+                    <span class="card-tag">Cross-generational</span>
+                </div>
+            </div>
+
+            <!-- Card 3: Artistic Empowerment and Space Regeneration -->
+            <div class="significance-card fade-in-up delay-3">
+                <div class="card-num">03</div>
+                <div class="card-header">
+                    <div class="card-icon">🎨</div>
+                    <div class="card-title-text">Artistic Empowerment and Space Regeneration</div>
+                </div>
+                <div class="card-body">
+                    <p>Through officially supported art festivals (such as <strong>HKwalls</strong>) and the efforts of
+                        non-profit organizations, graffiti has moved from the margins toward partial recognition as a
+                        public art form.</p>
+                    <ul class="feature-list">
+                        <li>Finnish artist <strong>Riitta Kuisma</strong> created the "<strong>Be Well</strong>" mural
+                            on the east side of Sai Ying Pun's Camp Street in 2024, emphasizing physical and mental
+                            health and natural healing, with support from the <strong>Hong Kong Tourism Board</strong>
+                        </li>
+                        <li>The <strong>ARTLANE</strong> area features thematic murals painted by <strong>9 local and
+                                international artists</strong> on <strong>13 buildings</strong>, incorporating elements
+                            of Viennese music and Hollywood legends, transforming this alley into an outdoor art gallery
+                        </li>
+                    </ul>
+                    <p>These projects demonstrate that when graffiti receives institutional support, it can become an
+                        <strong>effective tool for urban renewal</strong>, bringing economic vitality and cultural
+                        identity to old communities.</p>
+                </div>
+                <div class="card-tags">
+                    <span class="card-tag">HKwalls</span>
+                    <span class="card-tag">Be Well</span>
+                    <span class="card-tag">ARTLANE</span>
+                    <span class="card-tag">HKTB Support</span>
+                    <span class="card-tag">Urban Renewal</span>
+                </div>
+            </div>
+
+            <!-- Card 4: The Double-Edged Sword of Tourism and Cultural Consumption -->
+            <div class="significance-card fade-in-up delay-4">
+                <div class="card-num">04</div>
+                <div class="card-header">
+                    <div class="card-icon">⚖️</div>
+                    <div class="card-title-text">The Double-Edged Sword of Tourism and Cultural Consumption</div>
+                </div>
+                <div class="card-body">
+                    <p>Sai Ying Pun's graffiti art has become a popular destination for tourists exploring local culture
+                        beyond Central. However, this has also sparked <strong>tension between commercialization and
+                            authenticity</strong>:</p>
+                    <ul class="feature-list">
+                        <li><strong>Positive Aspect</strong>: Enhanced the area's visibility, driving development of
+                            surrounding cafés, creative shops, and guesthouses, injecting economic vitality into the old
+                            district</li>
+                        <li><strong>Concern</strong>: May weaken the community's original social structure; excessive
+                            commercialization could dilute the rebellious spirit and community attributes that graffiti
+                            art originally possessed</li>
+                        <li><strong>Conceptual Conflict</strong>: Some local residents still view graffiti as "illegal
+                            behavior," reflecting Hong Kong's ongoing struggle between <strong>order and freedom,
+                                regulation and creativity</strong></li>
+                    </ul>
+                    <div class="card-highlight">
+                        "How to attract tourists while protecting community authenticity is the core proposition that
+                        Sai Ying Pun's graffiti culture needs to face in the future."
+                    </div>
+                </div>
+                <div class="card-tags">
+                    <span class="card-tag">Commercialization</span>
+                    <span class="card-tag">Authenticity</span>
+                    <span class="card-tag">Order vs Freedom</span>
+                    <span class="card-tag">Community Dynamics</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="works.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Works
+            </a>
+            <a href="index.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Back to Home <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>概覽 - 西營盤</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Overview 頁面特有樣式 */
+
+
+        /* ===== 波浪圖區 ===== */
+        .hero-wave-section {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-image-wrap {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            overflow: hidden;
+        }
+
+        .hero-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 6s ease;
+            object-position: bottom;
+        }
+
+        .hero-wave-section:hover .hero-image-wrap img {
+            transform: scale(1.05);
+        }
+
+        .hero-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .hero-caption {
+            position: absolute;
+            bottom: 40px;
+            left: 28px;
+            color: white;
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.6rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        /* SVG 波浪 */
+        .wave-divider {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+            z-index: 2;
+        }
+
+        .wave-divider svg {
+            display: block;
+            width: 100%;
+            height: 60px;
+        }
+
+        /* ===== 標籤頁 ===== */
+        .tabs-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: rgba(192, 57, 43, 0.06);
+            color: var(--accent-red);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-red);
+            background: rgba(192, 57, 43, 0.08);
+            font-weight: 600;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background: var(--accent-red);
+            border-radius: 2px;
+        }
+
+        /* 標籤內容 */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== 響應式 ===== */
+        @media (max-width: 768px) {
+            .hero-image-wrap {
+                height: 240px;
+            }
+
+            .hero-caption {
+                font-size: 1.3rem;
+                left: 20px;
+                bottom: 32px;
+            }
+
+            .wave-divider svg {
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-image-wrap {
+                height: 200px;
+            }
+
+            .tabs-header {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 14px;
+            }
+
+            .tabs-header::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab-btn.active::after {
+                bottom: -16px;
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- 頂部導航 -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- 主內容 -->
+    <main class="main-container">
+        <h1 class="page-title">概覽</h1>
+
+        <!-- 波浪圖區 -->
+        <div class="hero-wave-section">
+            <div class="hero-image-wrap">
+                <img src="images/index-1.jpg" alt="Hong Kong Skyline">
+                <div class="hero-image-overlay"></div>
+                <div class="hero-caption">Sai Ying Pun · 西營盤</div>
+            </div>
+            <div class="wave-divider">
+                <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+                    <path fill="#ffffff" d="M0,64 C360,120 1080,0 1440,64 L1440,120 L0,120 Z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 內容卡片 -->
+        <div class="content-card">
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab(0)">地理位置</button>
+                <button class="tab-btn" onclick="switchTab(1)">名稱與歷史</button>
+                <button class="tab-btn" onclick="switchTab(2)">地標與特色</button>
+                <button class="tab-btn" onclick="switchTab(3)">現狀</button>
+            </div>
+
+            <!-- Tab 1: 位置 -->
+            <div class="tab-content active">
+                <div class="section-title">
+                    <div class="section-icon">📍</div>
+                    地理位置與交通
+                </div>
+                <div class="section-body">
+                    <p>西營盤位於<strong>香港島中西區</strong>，處於上環以西、西環以東的地理位置。這裡地勢起伏，面向大海，擁有獨特的山海景觀。</p>
+                    <div class="highlight-box">
+                        "從山坡上的老街俯瞰維多利亞港，是西營盤獨有的城市風景。"
+                    </div>
+                    <ul class="feature-list">
+                        <li><strong>西營盤地鐵站</strong>：港島線，2014年底開通，極大提升了區域交通便利性</li>
+                        <li><strong>電車線路</strong>：百年叮叮車穿梭其中，是香港最經典的交通符號之一</li>
+                        <li><strong>巴士與小巴</strong>：密集的路網連接中環、堅尼地城等核心區域</li>
+                    </ul>
+                    <div class="tag-list">
+                        <span class="tag">港島線</span>
+                        <span class="tag">叮叮車</span>
+                        <span class="tag">山海景觀</span>
+                        <span class="tag">中西區</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: 歷史 -->
+            <div class="tab-content">
+                <div class="section-title">
+                    <div class="section-icon">📜</div>
+                    名稱由來與歷史沿革
+                </div>
+                <div class="section-body">
+                    <p><strong>"西營盤"</strong>之名源於英文"Sai Ying
+                        Pun"，其中"營盤"意為軍營。這裡曾是早期英國軍事基地，<strong>1841年</strong>英國人即在此登陸，開啟了香港的歷史篇章。</p>
+                    <p>1850年代，隨著<strong>太平天國運動</strong>難民的湧入，大量內地移民在此定居，逐漸形成了獨特的<strong>"目"字形街道布局</strong>：</p>
+                    <div class="highlight-box">
+                        以皇后大道西、第一至第三街、高街、東側街和西側街以及正街為核心，構成了西營盤獨特的街巷肌理。
+                    </div>
+                    <ul class="feature-list">
+                        <li>維多利亞城<strong>最早開發</strong>的地區之一</li>
+                        <li>悠久的<strong>華人聚居歷史</strong>，保留了濃厚的本土社區氛圍</li>
+                        <li>至今保留許多<strong>舊式唐樓、傳統店鋪和歷史建築</strong></li>
+                    </ul>
+                    <div class="tag-list">
+                        <span class="tag">1841年登陸</span>
+                        <span class="tag">太平天國</span>
+                        <span class="tag">目字街區</span>
+                        <span class="tag">唐樓群</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: 地標 -->
+            <div class="tab-content">
+                <div class="section-title">
+                    <div class="section-icon">🏛️</div>
+                    地標建築與社區特色
+                </div>
+                <div class="section-body">
+                    <p>西營盤是一個<strong>新舊交融</strong>的典型樣本：既有傳統的海鮮店和中藥鋪，也有時尚的咖啡館和創意商店，學術氛圍濃厚，文化多元。</p>
+                    <ul class="feature-list">
+                        <li><strong>正街</strong>：香港最陡峭的道路之一，被稱為"長命斜"，兩旁林立著老字號商鋪</li>
+                        <li><strong>高街與西邊街</strong>：歷史建築集中地，包括百年教堂、舊精神病院等法定古蹟</li>
+                        <li><strong>藝里坊 (ARTLANE)</strong>：由香港藝術家與街坊合力打造的街頭藝術小巷，塗鴉壁畫遍佈</li>
+                        <li><strong>西營盤街市</strong>：傳統濕貨市場，充滿煙火氣與地道風味</li>
+                        <li><strong>中山紀念公園</strong>：可俯瞰維多利亞港和青馬大橋的濱海綠地</li>
+                        <li><strong>香港大學</strong>：緊鄰西營盤，為社區注入濃厚的學術與文化氣息</li>
+                    </ul>
+                    <div class="tag-list">
+                        <span class="tag">藝里坊</span>
+                        <span class="tag">正街</span>
+                        <span class="tag">中山紀念公園</span>
+                        <span class="tag">香港大學</span>
+                        <span class="tag">法定古蹟</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: 現狀 -->
+            <div class="tab-content">
+                <div class="section-title">
+                    <div class="section-icon">✨</div>
+                    今日西營盤
+                </div>
+                <div class="section-body">
+                    <p>今天的西營盤主要是一個<strong>住宅區</strong>，兼具社區商業和藝術元素。它是<strong>香港舊區活化</strong>的代表，在保留歷史風貌的同時，不斷注入新的創意活力。
+                    </p>
+                    <div class="highlight-box">
+                        "這裡沒有中環的繁華喧囂，卻有著最地道的香港生活氣息——適合漫步，適合發現，適合感受真實的本地風情。"
+                    </div>
+                    <ul class="feature-list">
+                        <li><strong>社區商業</strong>：街市、茶餐廳、 bakeries 與獨立咖啡店共存</li>
+                        <li><strong>藝術元素</strong>：塗鴉牆、創意工作室、不定期街頭藝術活動</li>
+                        <li><strong>舊區活化</strong>：政府與民間合力推動歷史建築保育與社區更新</li>
+                        <li><strong>漫步體驗</strong>：坡度起伏的街道、轉角遇到的壁畫、海風中的咖啡香——這是西營盤獨有的城市漫遊體驗</li>
+                    </ul>
+                    <div class="tag-list">
+                        <span class="tag">舊區活化</span>
+                        <span class="tag">社區商業</span>
+                        <span class="tag">街頭藝術</span>
+                        <span class="tag">城市漫步</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 頁面導航 -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="index.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Back to Home
+            </a>
+            <a href="background.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Background <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+
+            contents.forEach((content, i) => {
+                content.classList.toggle('active', i === index);
+            });
+        }
+    </script>
+</body>
+
+</html>

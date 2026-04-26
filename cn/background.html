@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背景 - 西營盤塗鴉</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* 標題區 */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .subtitle {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: var(--text-dark);
+            margin-top: 16px;
+            line-height: 1.4;
+            position: relative;
+            display: inline-block;
+        }
+
+        .subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), transparent);
+            border-radius: 1px;
+        }
+
+        .header-right {
+            flex-shrink: 0;
+        }
+
+        .header-image {
+            width: 140px;
+            height: 140px;
+            border-radius: 20px;
+            background: var(--card-bg);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s ease;
+            border: 3px solid white;
+        }
+
+        .header-image:hover {
+            transform: rotate(2deg) scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .header-image .placeholder-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Permanent Marker', cursive;
+            color: #ddd;
+            font-size: 0.9rem;
+        }
+
+        /* ===== 標籤 ===== */
+        .section-tag {
+            display: inline-block;
+            padding: 8px 18px;
+
+            background: var(--gray-card);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 24px;
+            margin: 16px 0px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .section-tag:hover::before {
+            left: 100%;
+        }
+
+        .section-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+
+
+        /* ===== 響應式 ===== */
+        @media (max-width: 768px) {
+            .header-section {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .header-left {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .subtitle::after {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80%;
+            }
+
+            .header-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-image {
+                width: 100px;
+                height: 100px;
+            }
+
+            .section-tag {
+                font-size: 0.85rem;
+                padding: 6px 14px;
+            }
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-5 {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- 頂部導航 -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- 主內容 -->
+    <main class="main-container">
+        <!-- 標題區 -->
+        <div class="header-section fade-in-up delay-1">
+            <div class="header-left">
+                <h1 class="page-title">背景</h1>
+                <div class="subtitle">The Origin of Graffiti in<br>Sai Ying Pun, Hong Kong</div>
+            </div>
+            <div class="header-right">
+                <div class="header-image">
+                    <img src="https://images.unsplash.com/photo-1569091791842-7cfb64e04797?q=80&w=400&auto=format&fit=crop"
+                        alt="Graffiti Art">
+                </div>
+            </div>
+        </div>
+
+        <!-- 草根塗鴉起源 -->
+        <div class="fade-in-up delay-2">
+            <div class="section-tag">The origin of grassroots graffiti</div>
+            <div class="content-card">
+                <div class="card-inner-title">
+                    <div class="card-icon">🖌️</div>
+                    "九龍皇帝"曾灶財（20 世紀 50 年代 - 21 世紀初）
+                </div>
+                <div class="card-body">
+                    <p>儘管曾灶財的活動範圍遍及整個香港，包括九龍、中環以及香港島的西環，但在香港島西部的歷史街區<strong>西營盤也有他的塗鴉痕跡</strong>。他是香港最早且最具代表性的街頭塗鴉藝術家之一。
+                    </p>
+
+                    <div class="highlight-text">
+                        他從 20 世紀 50 年代末到 60 年代初開始在街頭塗鴉，持續了 50 多年，直至 2007 年去世。他用毛筆書寫家族譜系，自稱為"九龍皇帝"，宣稱對九龍擁有主權。
+                    </div>
+
+                    <ul class="feature-list">
+                        <li><strong>創作形式</strong>：用毛筆書寫家族譜系，諸如"九龍皇帝 曾灶財"之類的字句反覆出現</li>
+                        <li><strong>時間跨度</strong>：從 20 世紀 50 年代末持續至 2007 年去世，超過半個世紀</li>
+                        <li><strong>社會影響</strong>：最初被視為破壞行為，後來逐漸被一些市民接受，甚至被藝術家和文化界認可為"民間藝術"</li>
+                        <li><strong>與西營盤的關係</strong>：儘管西營盤並非曾灶財活動的核心區域（他主要活躍於九龍），但作為全市範圍內塗鴉行為的一部分，他可以被視為西營盤早期塗鴉文化的間接來源之一
+                        </li>
+                    </ul>
+
+                    <div class="tag-list">
+                        <span class="tag">曾灶財</span>
+                        <span class="tag">九龍皇帝</span>
+                        <span class="tag">毛筆塗鴉</span>
+                        <span class="tag">民間藝術</span>
+                        <span class="tag">1950s-2007</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 現代塗鴉牆 -->
+        <div class="fade-in-up delay-3">
+            <div class="section-tag">The rise of modern graffiti walls</div>
+            <div class="content-card">
+                <div class="card-inner-title">
+                    <div class="card-icon">🎨</div>
+                    2010 年代後的藝術復興項目
+                </div>
+                <div class="card-body">
+                    <p>如今西營盤著名的"塗鴉牆"或"打卡點"並非源自曾灶財式的草根塗鴉，而是近年來由政府或公眾推動的<strong>城市藝術復興項目</strong>所造就。</p>
+
+                    <div class="highlight-text">
+                        這些塗鴉大多是獲準的藝術項目，與非法塗鴉根本不同，旨在將歷史街區與當代藝術相結合。
+                    </div>
+
+                    <ul class="feature-list">
+                        <li><strong>主要區域</strong>：集中在中正街、奇靈里和石塘咀等小巷，形成了"藝里坊"等戶外藝術區</li>
+                        <li><strong>創作主題</strong>：由本地及國際藝術家共同創作，涵蓋舊香港風格、動植物、抽象圖案等主題</li>
+                        <li><strong>起始時間</strong>：大約在 2010 年代末至 2020 年代初，作為"西營盤藝術節"中"市區重建項目"的一部分</li>
+                        <li><strong>官方態度</strong>：這些塗鴉大多是獲準的藝術項目，與非法塗鴉根本不同，旨在將歷史街區與當代藝術相結合</li>
+                        <li><strong>現代藝術起源</strong>：2010 年代以後，由藝術團體和社區推動的合法街頭壁畫項目，構成了如今西營盤塗鴉牆的主體</li>
+                    </ul>
+
+                    <div class="tag-list">
+                        <span class="tag">藝里坊</span>
+                        <span class="tag">ARTLANE</span>
+                        <span class="tag">市區重建</span>
+                        <span class="tag">合法壁畫</span>
+                        <span class="tag">2010s+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 發展歷史總結 -->
+        <div class="summary-section fade-in-up delay-4">
+            <div class="summary-title">The development history of<br>Sai Ying Pun, Hong Kong</div>
+            <div class="summary-card">
+                <div class="card-inner-title">
+                    <div class="card-icon">📖</div>
+                    從草根抗議到城市藝術：西營盤塗鴉的雙重起源
+                </div>
+                <div class="summary-body">
+                    <p>西營盤的塗鴉並非單一起源，而是<strong>草根抗議風格塗鴉</strong>（以曾灶財為代表）與<strong>當代城市藝術復興</strong>的融合。</p>
+                    <p>從 20 世紀中葉曾灶財用毛筆在街頭書寫家族主權宣言，到 21 世紀第二個十年裡政府與藝術家合作打造"藝里坊"戶外畫廊，西營盤的街頭藝術經歷了從"非法標記"到"文化資產"的蛻變。</p>
+                    <div class="highlight-text">
+                        這種雙重起源賦予了西營盤塗鴉獨特的文化厚度：它既承載著香港底層民眾的聲音與記憶，又展現著當代城市更新的創意活力。
+                    </div>
+                    <p>今天的西營盤塗鴉牆，不僅是遊客的打卡熱點，更是香港舊區活化、社區參與式藝術以及歷史文化保育的生動案例。</p>
+
+                    <div class="tag-list">
+                        <span class="tag">草根塗鴉</span>
+                        <span class="tag">城市復興</span>
+                        <span class="tag">社區參與</span>
+                        <span class="tag">舊區活化</span>
+                        <span class="tag">文化保育</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 頁面導航 -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="overview.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Overview
+            </a>
+            <a href="artistic_landmark.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Artistic Landmark <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

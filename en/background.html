@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background - Sai Ying Pun Graffiti</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Header Section */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .subtitle {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: var(--text-dark);
+            margin-top: 16px;
+            line-height: 1.4;
+            position: relative;
+            display: inline-block;
+        }
+
+        .subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), transparent);
+            border-radius: 1px;
+        }
+
+        .header-right {
+            flex-shrink: 0;
+        }
+
+        .header-image {
+            width: 140px;
+            height: 140px;
+            border-radius: 20px;
+            background: var(--card-bg);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s ease;
+            border: 3px solid white;
+        }
+
+        .header-image:hover {
+            transform: rotate(2deg) scale(1.05);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .header-image .placeholder-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Permanent Marker', cursive;
+            color: #ddd;
+            font-size: 0.9rem;
+        }
+
+        /* ===== Tags ===== */
+        .section-tag {
+            display: inline-block;
+            padding: 8px 18px;
+
+            background: var(--gray-card);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 24px;
+            margin: 16px 0px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .section-tag:hover::before {
+            left: 100%;
+        }
+
+        .section-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .header-section {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .header-left {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .subtitle::after {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80%;
+            }
+
+            .header-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-image {
+                width: 100px;
+                height: 100px;
+            }
+
+            .section-tag {
+                font-size: 0.85rem;
+                padding: 6px 14px;
+            }
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-5 {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Header Section -->
+        <div class="header-section fade-in-up delay-1">
+            <div class="header-left">
+                <h1 class="page-title">Background</h1>
+                <div class="subtitle">The Origin of Graffiti in<br>Sai Ying Pun, Hong Kong</div>
+            </div>
+            <div class="header-right">
+                <div class="header-image">
+                    <img src="https://images.unsplash.com/photo-1569091791842-7cfb64e04797?q=80&w=400&auto=format&fit=crop"
+                        alt="Graffiti Art">
+                </div>
+            </div>
+        </div>
+
+        <!-- Grassroots Graffiti Origin -->
+        <div class="fade-in-up delay-2">
+            <div class="section-tag">The Origin of Grassroots Graffiti</div>
+            <div class="content-card">
+                <div class="card-inner-title">
+                    <div class="card-icon">🖌️</div>
+                    Tsang Tsou Choi "King of Kowloon" (1950s - Early 21st Century)
+                </div>
+                <div class="card-body">
+                    <p>Although Tsang Tsou Choi's activities spanned across Hong Kong, including Kowloon, Central, and
+                        Western Sai Ying Pun on Hong Kong Island, <strong>his graffiti traces can also be found in Sai
+                            Ying Pun</strong>, a historic neighborhood in western Hong Kong Island. He was one of Hong
+                        Kong's earliest and most representative street graffiti artists.
+                    </p>
+
+                    <div class="highlight-text">
+                        He began street graffiti from the late 1950s to early 1960s, continuing for over 50 years until
+                        his death in 2007. He used calligraphy brushes to write family genealogies, proclaiming himself
+                        "King of Kowloon" and claiming sovereignty over Kowloon.
+                    </div>
+
+                    <ul class="feature-list">
+                        <li><strong>Creative Form</strong>: Used calligraphy brushes to write family genealogies, with
+                            repeated phrases like "King of Kowloon Tsang Tsou Choi"</li>
+                        <li><strong>Time Span</strong>: From the late 1950s until his death in 2007, spanning over half
+                            a century</li>
+                        <li><strong>Social Impact</strong>: Initially viewed as vandalism, gradually accepted by some
+                            citizens, and later recognized by artists and cultural circles as "folk art"</li>
+                        <li><strong>Relationship with Sai Ying Pun</strong>: Although Sai Ying Pun was not Tsang Tsou
+                            Choi's core activity area (he was mainly active in Kowloon), as part of city-wide graffiti
+                            activities, he can be considered one of the indirect sources of early graffiti culture in
+                            Sai Ying Pun
+                        </li>
+                    </ul>
+
+                    <div class="tag-list">
+                        <span class="tag">Tsang Tsou Choi</span>
+                        <span class="tag">King of Kowloon</span>
+                        <span class="tag">Calligraphy Graffiti</span>
+                        <span class="tag">Folk Art</span>
+                        <span class="tag">1950s-2007</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modern Graffiti Walls -->
+        <div class="fade-in-up delay-3">
+            <div class="section-tag">The Rise of Modern Graffiti Walls</div>
+            <div class="content-card">
+                <div class="card-inner-title">
+                    <div class="card-icon">🎨</div>
+                    Art Revitalization Projects After the 2010s
+                </div>
+                <div class="card-body">
+                    <p>The famous "graffiti walls" or "Instagram spots" in Sai Ying Pun today are not derived from Tsang
+                        Tsou Choi-style grassroots graffiti, but rather created by <strong>urban art revitalization
+                            projects</strong> promoted by the government or public in recent years.</p>
+
+                    <div class="highlight-text">
+                        Most of these graffiti are permitted art projects, fundamentally different from illegal
+                        graffiti, aiming to combine historic neighborhoods with contemporary art.
+                    </div>
+
+                    <ul class="feature-list">
+                        <li><strong>Main Areas</strong>: Concentrated in alleys such as Centre Street, Ki Ling Lane, and
+                            Shek Tong Tsui, forming outdoor art districts like "ARTLANE"</li>
+                        <li><strong>Creative Themes</strong>: Co-created by local and international artists, covering
+                            themes such as old Hong Kong style, flora and fauna, and abstract patterns</li>
+                        <li><strong>Starting Time</strong>: Approximately from the late 2010s to early 2020s, as part of
+                            the "Urban Renewal Project" in the "Sai Ying Pun Art Festival"</li>
+                        <li><strong>Official Attitude</strong>: Most of these graffiti are permitted art projects,
+                            fundamentally different from illegal graffiti, aiming to combine historic neighborhoods with
+                            contemporary art</li>
+                        <li><strong>Modern Art Origin</strong>: After the 2010s, legal street mural projects promoted by
+                            art groups and communities constitute the main body of Sai Ying Pun's graffiti walls today
+                        </li>
+                    </ul>
+
+                    <div class="tag-list">
+                        <span class="tag">ARTLANE</span>
+                        <span class="tag">ARTLANE</span>
+                        <span class="tag">Urban Renewal</span>
+                        <span class="tag">Legal Murals</span>
+                        <span class="tag">2010s+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Development History Summary -->
+        <div class="summary-section fade-in-up delay-4">
+            <div class="summary-title">The Development History of<br>Sai Ying Pun, Hong Kong</div>
+            <div class="summary-card">
+                <div class="card-inner-title">
+                    <div class="card-icon">📖</div>
+                    From Grassroots Protest to Urban Art: The Dual Origins of Sai Ying Pun Graffiti
+                </div>
+                <div class="summary-body">
+                    <p>Sai Ying Pun's graffiti does not have a single origin, but rather represents a fusion of
+                        <strong>grassroots protest-style graffiti</strong> (represented by Tsang Tsou Choi) and
+                        <strong>contemporary urban art revitalization</strong>.</p>
+                    <p>From Tsang Tsou Choi's use of calligraphy brushes to write family sovereignty declarations on the
+                        streets in the mid-20th century, to the government and artists collaborating to create the
+                        "ARTLANE" outdoor gallery in the second decade of the 21st century, Sai Ying Pun's street art
+                        has undergone a transformation from "illegal markings" to "cultural assets".</p>
+                    <div class="highlight-text">
+                        This dual origin gives Sai Ying Pun graffiti unique cultural depth: it carries the voices and
+                        memories of Hong Kong's grassroots people while showcasing the creative vitality of contemporary
+                        urban renewal.
+                    </div>
+                    <p>Today's Sai Ying Pun graffiti walls are not only popular Instagram spots for tourists but also
+                        vivid examples of Hong Kong's old district revitalization, community participatory art, and
+                        historical cultural preservation.</p>
+
+                    <div class="tag-list">
+                        <span class="tag">Grassroots Graffiti</span>
+                        <span class="tag">Urban Revitalization</span>
+                        <span class="tag">Community Participation</span>
+                        <span class="tag">Old District Renewal</span>
+                        <span class="tag">Cultural Preservation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="overview.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Overview
+            </a>
+            <a href="artistic_landmark.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Artistic Landmark <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

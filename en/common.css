@@ -1,0 +1,564 @@
+/* ===== 基础重置 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== CSS 变量 ===== */
+:root {
+  --primary-dark: #2d2d3a;
+  --accent-red: #c0392b;
+  --paper-bg: #e8e4dc;
+  --card-bg: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-muted: #5a5a5a;
+  --text-light: #f5f5f5;
+  --nav-bg: #3a3a45;
+  --border-light: rgba(0, 0, 0, 0.06);
+  --gray-card: #7a7a7a;
+}
+
+/* ===== 基础样式 ===== */
+body {
+  font-family: "Inter", "Noto Serif SC", sans-serif;
+  background-color: var(--paper-bg);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* 纸质纹理 */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.015) 2px,
+      rgba(0, 0, 0, 0.015) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.01) 2px,
+      rgba(0, 0, 0, 0.01) 4px
+    );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* ===== 顶部导航 ===== */
+.top-nav {
+  background: var(--nav-bg);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.top-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.back-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s;
+}
+
+.back-link:hover {
+  color: white;
+}
+
+.back-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nav-brand {
+  font-family: "Permanent Marker", cursive;
+  color: white;
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+/* ===== 主内容区 ===== */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* ===== 页面标题 ===== */
+.page-title {
+  font-family: "Shadows Into Light", cursive;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--text-dark);
+  margin-bottom: 32px;
+  position: relative;
+  display: inline-block;
+}
+
+.page-title::before {
+  content: "《";
+  color: var(--accent-red);
+  font-weight: bold;
+}
+
+.page-title::after {
+  content: "》";
+  color: var(--accent-red);
+  font-weight: bold;
+}
+
+/* ===== 页面底部 ===== */
+.page-footer {
+  text-align: center;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px dashed #ccc;
+  color: #999;
+  font-size: 0.85rem;
+  font-family: "Shadows Into Light", cursive;
+}
+
+.bottom-bar {
+  height: 8px;
+  background: var(--nav-bg);
+  margin-top: 40px;
+  border-radius: 4px 4px 0 0;
+}
+
+/* ===== 滚动条 ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 3px;
+}
+
+/* ===== 加载动画 ===== */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--paper-bg);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
+}
+
+.loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #ddd;
+  border-top-color: var(--accent-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== 入场动画 ===== */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeInUp 0.7s ease forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.1s;
+}
+
+.delay-2 {
+  animation-delay: 0.2s;
+}
+
+.delay-3 {
+  animation-delay: 0.3s;
+}
+
+.delay-4 {
+  animation-delay: 0.4s;
+}
+
+.delay-5 {
+  animation-delay: 0.5s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 通用卡片样式 ===== */
+.content-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.06),
+    0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 卡片内部标题 */
+.card-inner-title {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 卡片内容区 */
+.card-body {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+.card-body p {
+  margin-bottom: 12px;
+}
+
+/* 总结卡片 */
+.summary-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.06),
+    0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-light);
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-title {
+  font-family: "Shadows Into Light", cursive;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: var(--text-dark);
+  margin: 16px 0px;
+  position: relative;
+  display: inline-block;
+}
+
+.summary-title::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: var(--accent-red);
+  border-radius: 1px;
+}
+
+.summary-body {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+.summary-body p {
+  margin-bottom: 12px;
+}
+
+/* 灰色卡片 */
+.gray-card {
+  background: var(--gray-card);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+}
+
+.gray-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-red), #e74c3c, #f39c12);
+}
+
+.gray-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+/* ===== 标签样式 ===== */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tag {
+  padding: 6px 14px;
+  background: #f5f5f5;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s;
+}
+
+.tag:hover {
+  background: var(--accent-red);
+  color: white;
+  border-color: var(--accent-red);
+  transform: translateY(-2px);
+}
+
+/* 灰色卡片内的标签 */
+.gray-card .tag {
+  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  font-size: 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.gray-card .tag:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ===== 列表样式 ===== */
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+
+.feature-list li {
+  padding: 10px 0 10px 28px;
+  position: relative;
+  border-bottom: 1px dashed #eee;
+}
+
+.feature-list li:last-child {
+  border-bottom: none;
+}
+
+.feature-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-red);
+  border-radius: 50%;
+  opacity: 0.6;
+}
+
+/* 灰色卡片内的列表 */
+.gray-card .feature-list li {
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.gray-card .feature-list li::before {
+  opacity: 0.8;
+}
+
+/* ===== 高亮框 ===== */
+.highlight-box {
+  background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+  padding: 16px 20px;
+  border-radius: 0 12px 12px 0;
+  margin: 16px 0;
+  font-style: italic;
+  color: var(--text-dark);
+}
+
+/* 高亮文本 */
+.highlight-text {
+  background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin: 16px 0;
+  font-style: italic;
+  color: var(--text-dark);
+}
+
+/* 灰色卡片内的高亮 */
+.gray-card .highlight-box {
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--accent-red);
+  backdrop-filter: blur(4px);
+  color: white;
+}
+
+.gray-card .highlight-text {
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--accent-red);
+  backdrop-filter: blur(4px);
+  color: white;
+}
+
+/* ===== 章节标题 ===== */
+.section-title {
+  font-family: "Noto Serif SC", serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ===== 章节内容 ===== */
+.section-body {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.9;
+}
+
+.section-body p {
+  margin-bottom: 12px;
+}
+
+/* ===== 章节图标 ===== */
+.section-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--accent-red), #e74c3c);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* 灰色卡片内的图标 */
+.card-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  backdrop-filter: blur(4px);
+}
+
+/* ===== 页面导航 ===== */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding: 20px 0;
+  border-top: 1px solid #ddd;
+}
+
+.page-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.3s;
+}
+
+.page-nav a:hover {
+  color: var(--accent-red);
+}
+
+.page-nav a:last-child {
+  color: var(--accent-red);
+  font-weight: 500;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  .main-container {
+    padding: 24px 16px 60px;
+  }
+
+  .page-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .content-card,
+  .gray-card {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .top-nav-inner {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tag {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+
+  .page-nav {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+}

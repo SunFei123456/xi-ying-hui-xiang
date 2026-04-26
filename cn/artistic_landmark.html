@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>藝術地標 - 西營盤</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        .section-subtitle {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), transparent);
+            border-radius: 1px;
+        }
+
+        .artlane-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        /* 左側白色卡片 */
+        .artlane-info-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.06),
+                0 2px 4px -2px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+
+        .artlane-info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-card-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-dark);
+        }
+
+        .info-card-body {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.85;
+        }
+
+        .info-card-body p {
+            margin-bottom: 10px;
+        }
+
+        .info-highlight {
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+            border-left: 3px solid var(--accent-red);
+            padding: 12px 14px;
+            border-radius: 0 10px 10px 0;
+            margin: 12px 0;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            font-style: italic;
+        }
+
+        /* 右側灰色大圖卡 */
+        .artlane-image-card {
+            background: var(--gray-card);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            height: 620px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transition: all 0.4s ease;
+        }
+
+        .artlane-image-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+        }
+
+        .artlane-image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 6s ease;
+        }
+
+        .artlane-image-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .artlane-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 50%);
+            display: flex;
+            align-items: flex-end;
+            padding: 24px;
+        }
+
+        .artlane-image-caption {
+            color: white;
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.3rem;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        /* ===== 核心街道區域 ===== */
+        .streets-section {
+            margin-top: 48px;
+        }
+
+        .streets-subtitle {
+            font-family: 'Shadows Into Light', cursive;
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .streets-subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-red), transparent);
+            border-radius: 1px;
+        }
+
+        .streets-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .street-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .street-image-box {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-light);
+            position: relative;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .street-image-box:hover {
+            transform: translateY(-6px) rotate(1deg);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .street-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 4s ease;
+        }
+
+        .street-image-box:hover img {
+            transform: scale(1.08);
+        }
+
+        .street-image-box .placeholder-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Permanent Marker', cursive;
+            color: #ddd;
+            font-size: 1.5rem;
+        }
+
+        .street-label {
+            width: 100%;
+            padding: 10px 8px;
+            background: var(--gray-card);
+            color: white;
+            text-align: center;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            cursor: default;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .street-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .street-item:hover .street-label::before {
+            left: 100%;
+        }
+
+        .street-item:hover .street-label {
+            background: var(--accent-red);
+            transform: translateY(-2px);
+        }
+
+        /* ===== 響應式 ===== */
+        @media (max-width: 768px) {
+            .artlane-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .artlane-image-card {
+                min-height: 240px;
+                order: -1;
+            }
+
+            .streets-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .section-subtitle::after,
+            .streets-subtitle::after {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .streets-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .street-label {
+                font-size: 0.8rem;
+                padding: 8px 6px;
+            }
+
+            .artlane-info-card {
+                padding: 20px;
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- 頂部導航 -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- 主內容 -->
+    <main class="main-container">
+        <h1 class="page-title">藝術地標</h1>
+
+        <!-- ARTLANE -->
+        <section class="artlane-section fade-in-up delay-1">
+            <div class="section-subtitle">Artlane</div>
+            <div class="artlane-grid">
+                <!-- 左側信息卡 -->
+                <div class="artlane-info-card">
+                    <div class="info-card-title">🎨 西營盤塗鴉藝術區</div>
+                    <div class="info-card-body">
+                        <p>西營盤的塗鴉遍佈<strong>十幾棟建築</strong>，形成了一個集中的藝術區域。其中，<strong>"ARTLANE"</strong>是由中環街、奇靈里和石塘咀組成的塗鴉區，匯集了本地和國際藝術家的作品。
+                        </p>
+                        <div class="info-highlight">
+                            "鮮豔的色彩使其成為遊客和居民拍照的熱門地點。"
+                        </div>
+                        <p><strong>多樣風格</strong>：這裡的塗鴉風格各異，從色彩斑斕、充滿童趣的壁畫到反映社會問題、引人深思的作品應有盡有。</p>
+                        <p>例如，一位藝術家創作了一幅以<strong>老式香港涼茶鋪</strong>為主題的大型壁畫，巧妙地將傳統與現代融合在一起。</p>
+                        <p><strong>動態更新</strong>：塗鴉文化具有很強的時間敏感性。一些作品是在藝術節期間的限時創作，之後可能會被新的塗鴉覆蓋，這為探索增添了新鮮感和不可預測性。</p>
+                    </div>
+                </div>
+
+                <!-- 右側大圖卡 -->
+                <div class="artlane-image-card">
+                    <img src="./images/index-3.jpg" alt="Artlane Graffiti">
+                    <div class="artlane-image-overlay">
+                        <div class="artlane-image-caption">ARTLANE · 藝里坊</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Streets -->
+        <section class="streets-section fade-in-up delay-2">
+            <div class="streets-subtitle">Core Graffiti Streets and Alleys</div>
+            <div class="streets-grid">
+                <div class="street-item">
+                    <div class="street-image-box">
+                        <img src="images/cover1.jpg" alt="Belcher's Street">
+                    </div>
+                    <div class="street-label">卑路乍街</div>
+                </div>
+                <div class="street-item">
+                    <div class="street-image-box">
+                        <img src="images/cover2.jpg" alt="Pok Fu Lam Road">
+                    </div>
+                    <div class="street-label">薄扶林道</div>
+                </div>
+                <div class="street-item">
+                    <div class="street-image-box">
+                        <img src="images/cover3.jpg" alt="Sai Ying Pun Main Street">
+                    </div>
+                    <div class="street-label">西營盤正街</div>
+                </div>
+                <div class="street-item">
+                    <div class="street-image-box">
+                        <img src="images/cover4.jpg" alt="High Street">
+                    </div>
+                    <div class="street-label">高街</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 頁面導航 -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="background.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Previous: Background
+            </a>
+            <a href="exploration-route.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Exploration Route <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <div class="bottom-bar"></div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+    </script>
+</body>
+
+</html>

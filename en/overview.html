@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview - Sai Ying Pun</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Shadows+Into+Light&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="common.css">
+    <style>
+        /* Overview Page Specific Styles */
+
+        /* ===== Hero Wave Section ===== */
+        .hero-wave-section {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-image-wrap {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            overflow: hidden;
+        }
+
+        .hero-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 6s ease;
+            object-position: bottom;
+        }
+
+        .hero-wave-section:hover .hero-image-wrap img {
+            transform: scale(1.05);
+        }
+
+        .hero-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .hero-caption {
+            position: absolute;
+            bottom: 40px;
+            left: 28px;
+            color: white;
+            font-family: 'Shadows Into Light', cursive;
+            font-size: 1.6rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        /* SVG Wave */
+        .wave-divider {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            line-height: 0;
+            z-index: 2;
+        }
+
+        .wave-divider svg {
+            display: block;
+            width: 100%;
+            height: 60px;
+        }
+
+        /* ===== Tabs ===== */
+        .tabs-header {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 12px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: rgba(192, 57, 43, 0.06);
+            color: var(--accent-red);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-red);
+            background: rgba(192, 57, 43, 0.08);
+            font-weight: 600;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background: var(--accent-red);
+            border-radius: 2px;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .hero-image-wrap {
+                height: 240px;
+            }
+
+            .hero-caption {
+                font-size: 1.3rem;
+                left: 20px;
+                bottom: 32px;
+            }
+
+            .wave-divider svg {
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-image-wrap {
+                height: 200px;
+            }
+
+            .tabs-header {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 14px;
+            }
+
+            .tabs-header::-webkit-scrollbar {
+                display: none;
+            }
+
+            .tab-btn.active::after {
+                bottom: -16px;
+            }
+        }
+    </style>
+    <base target="_blank">
+</head>
+
+<body>
+    <div class="loading-screen" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <a href="#" class="back-link" onclick="history.back(); return false;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back
+            </a>
+            <span class="nav-brand">GRAFFITI CULTURE</span>
+            <div style="width: 60px;"></div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <h1 class="page-title">Overview</h1>
+
+        <!-- Hero Wave Section -->
+        <div class="hero-wave-section">
+            <div class="hero-image-wrap">
+                <img src="images/index-1.jpg" alt="Hong Kong Skyline">
+                <div class="hero-image-overlay"></div>
+                <div class="hero-caption">Sai Ying Pun · 西营盘</div>
+            </div>
+            <div class="wave-divider">
+                <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+                    <path fill="#ffffff" d="M0,64 C360,120 1080,0 1440,64 L1440,120 L0,120 Z"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Content Card -->
+        <div class="content-card">
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab(0)">Location</button>
+                <button class="tab-btn" onclick="switchTab(1)">Name & History</button>
+                <button class="tab-btn" onclick="switchTab(2)">Landmarks</button>
+                <button class="tab-btn" onclick="switchTab(3)">Today</button>
+            </div>
+
+            <!-- Tab 1: Location -->
+            <div class="tab-content active">
+                <div class="section-title">
+                    <div class="section-icon">📍</div>
+                    Location & Transportation
+                </div>
+                <div class="section-body">
+                    <p>Sai Ying Pun is located in the <strong>Central and Western District</strong> of Hong Kong Island,
+                        positioned between Sheung Wan to the east and Kennedy Town to the west. The area features
+                        undulating terrain facing the sea, offering unique mountain and ocean landscapes.</p>
+                    <div class="highlight-box">
+                        "Overlooking Victoria Harbour from the old streets on the hillside is a unique urban scenery
+                        exclusive to Sai Ying Pun."
+                    </div>
+                    <ul class="feature-list">
+                        <li><strong>Sai Ying Pun MTR Station</strong>: Island Line, opened in late 2014, greatly
+                            improving regional accessibility</li>
+                        <li><strong>Tram Routes</strong>: The century-old Ding Ding trams pass through, one of Hong
+                            Kong's most classic transportation symbols</li>
+                        <li><strong>Buses & Minibuses</strong>: Dense road network connecting Central, Kennedy Town, and
+                            other core areas</li>
+                    </ul>
+                    <div class="tag-list">
+                        <span class="tag">Island Line</span>
+                        <span class="tag">Ding Ding Tram</span>
+                        <span class="tag">Mountain & Sea Views</span>
+                        <span class="tag">Central & Western</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: History -->
+            <div class="tab-content">
+                <div class="section-title">
+                    <div class="section-icon">📜</div>
+                    Name Origin & Historical Evolution
+                </div>
+                <div class="section-body">
+                    <p>The name <strong>"Sai Ying Pun"</strong> comes from the English name, where "Ying Pun" means
+                        military camp. This area was once an early British military base. In <strong>1841</strong>, the
+                        British landed here, opening the historical chapter of Hong Kong.</p>
+                    <p>In the 1850s, with the influx of refugees from the <strong>Taiping Rebellion</strong>, a large
+                        number of mainland immigrants settled here, gradually forming a unique <strong>"grid" street
+                            layout</strong>:</p>
+                    <div class="highlight-box">
+                        Centered around Queen's Road West, First to Third Streets, High Street, Eastern and Western
+                        Streets, and Centre Street, forming Sai Ying Pun's unique street fabric.
+                    </div>
+                    <ul class="feature-list">
+                        <li>One of the <strong>earliest developed</strong> areas of Victoria City</li>
+                        <li>Long history of <strong>Chinese settlement</strong>, retaining a strong local community
+                            atmosphere</li>
+                        <li>Many <strong>old-style tenement buildings, traditional shops, and historic
+                                architecture</strong> still preserved</li>
+                    </ul>
+                    <div class="tag-list">
+                        <span class="tag">1841 Landing</span>
+                        <span class="tag">Taiping Rebellion</span>
+                        <span class="tag">Grid Streets</span>
+                        <span class="tag">Tenement Buildings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Landmarks -->
+            <div class="tab-content">
+                <div class="section-title">
+                    <div class="section-icon">🏛️</div>
+                    Landmarks & Community Features
+                </div>
+                <div class="section-body">
+                    <p>Sai Ying Pun is a typical example of <strong>old-meets-new</strong>: traditional seafood shops
+                        and Chinese medicine stores coexist with trendy cafés and creative boutiques, creating a rich
+                        academic atmosphere and cultural diversity.</p>
+                    <ul class="feature-list">
+                        <li><strong>Centre Street</strong>: One of Hong Kong's steepest roads, known as "Long Life
+                            Slope," lined with time-honored shops</li>
+                        <li><strong>High Street & Western Street</strong>: Concentrated historic buildings, including
+                            century-old churches and the Old Mental Hospital (declared monuments)</li>
+                        <li><strong>ARTLANE</strong>: A street art alley created by Hong Kong artists and neighbors,
+                            covered in graffiti murals</li>
+                        <li><strong>Sai Ying Pun Market</strong>: Traditional wet market full of local flavor and
+                            atmosphere</li>
+                        <li><strong>Sun Yat Sen Memorial Park</strong>: Coastal green space overlooking Victoria Harbour
+                            and Tsing Ma Bridge</li>
+                        <li><strong>The University of Hong Kong</strong>: Adjacent to Sai Ying Pun, injecting rich
+                            academic and cultural atmosphere</li>
+                    </ul>
+                    <div class="tag-list">
+                        <span class="tag">ARTLANE</span>
+                        <span class="tag">Centre Street</span>
+                        <span class="tag">Sun Yat Sen Park</span>
+                        <span class="tag">HKU</span>
+                        <span class="tag">Declared Monuments</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Today -->
+            <div class="tab-content">
+                <div class="section-title">
+                    <div class="section-icon">✨</div>
+                    Sai Ying Pun Today
+                </div>
+                <div class="section-body">
+                    <p>Today, Sai Ying Pun is primarily a <strong>residential area</strong>, combining community
+                        commerce and artistic elements. It represents <strong>Hong Kong's urban revitalization</strong>,
+                        preserving historical character while continuously injecting new creative vitality.</p>
+                    <div class="highlight-box">
+                        "Without the hustle and bustle of Central, it has the most authentic Hong Kong life
+                        atmosphere—perfect for strolling, discovering, and experiencing the real local flavor."
+                    </div>
+                    <ul class="feature-list">
+                        <li><strong>Community Commerce</strong>: Markets, cha chaan tengs, bakeries, and independent
+                            cafés coexist</li>
+                        <li><strong>Artistic Elements</strong>: Graffiti walls, creative studios, and periodic street
+                            art events</li>
+                        <li><strong>Urban Revitalization</strong>: Government and community collaboration in heritage
+                            conservation and neighborhood renewal</li>
+                        <li><strong>Walking Experience</strong>: Undulating streets, murals around corners, coffee aroma
+                            in the sea breeze—a unique urban roaming experience exclusive to Sai Ying Pun</li>
+                    </ul>
+                    <div class="tag-list">
+                        <span class="tag">Urban Revitalization</span>
+                        <span class="tag">Community Commerce</span>
+                        <span class="tag">Street Art</span>
+                        <span class="tag">Urban Walk</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="page-nav"
+            style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
+            <a href="index.html"
+                style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
+                <span>←</span> Back to Home
+            </a>
+            <a href="background.html"
+                style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
+                Next: Background <span>→</span>
+            </a>
+        </div>
+
+        <div class="page-footer">
+            The Graffiti Culture in Sai Ying Pun · Hong Kong
+        </div>
+    </main>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 300);
+        });
+
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach((tab, i) => {
+                tab.classList.toggle('active', i === index);
+            });
+
+            contents.forEach((content, i) => {
+                content.classList.toggle('active', i === index);
+            });
+        }
+    </script>
+</body>
+
+</html>
