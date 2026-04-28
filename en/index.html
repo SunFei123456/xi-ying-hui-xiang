@@ -547,11 +547,6 @@
         </div>
     </section>
 
-    <!-- Background Music -->
-    <audio id="bgMusic" loop>
-        <source src="audio/bgm.mp3" type="audio/mpeg">
-    </audio>
-
     <!-- Music Play Button -->
     <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Play/Pause Music">
         🎵
@@ -634,28 +629,11 @@
         </div>
     </main>
 
+    <!-- Global Music Player -->
+    <script src="music-player.js"></script>
+
     <script>
-        // Music playback control
-        let isPlaying = false;
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
-
-        function toggleMusic() {
-            if (isPlaying) {
-                bgMusic.pause();
-                musicBtn.classList.remove('playing');
-                musicBtn.innerHTML = '🎵';
-                musicBtn.title = 'Play Music';
-            } else {
-                bgMusic.play().catch(e => console.log('Audio play failed:', e));
-                musicBtn.classList.add('playing');
-                musicBtn.innerHTML = '🔊';
-                musicBtn.title = 'Pause Music';
-            }
-            isPlaying = !isPlaying;
-        }
-
-        // 页面加载完成后隐藏 loader
+        // Hide loader after page load
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
