@@ -57,7 +57,7 @@
 
         #map2d {
             width: 100%;
-            height: 380px;
+            height: 580px;
             z-index: 1;
         }
 
@@ -1197,7 +1197,44 @@
                     iconAnchor: [16, 16]
                 });
                 const m = L.marker([s.lat, s.lng], { icon }).addTo(map2d);
-                m.bindPopup(`<b>${s.name}</b><br>${s.desc}`);
+
+                // Add images to markers
+                let imgSrc = '';
+                if (s.name === 'PMQ') {
+                    imgSrc = 'images/router1-1.jpg';
+                } else if (s.name === 'Sai Ying Pun Street') {
+                    imgSrc = 'images/router1-2.jpg';
+                } else if (s.name === 'Eastern Street') {
+                    imgSrc = 'images/router1-3.jpg';
+                } else if (s.name === 'Stone Lane / Ki Ling Lane') {
+                    imgSrc = 'images/router1-4.jpg';
+                } else if (s.name === 'Rainbow Stairs') {
+                    imgSrc = 'images/router2-1.jpg';
+                } else if (s.name === 'Hidden Graffiti Wall') {
+                    imgSrc = 'images/router2-2.jpg';
+                } else if (s.name === 'Winston Coffee') {
+                    imgSrc = 'images/router2-3.jpg';
+                } else if (s.name === 'High Street') {
+                    imgSrc = 'images/router3-1.jpg';
+                } else if (s.name === 'Centre Street') {
+                    imgSrc = 'images/router3-2.jpg';
+                } else if (s.name === 'Sai Ying Pun Market') {
+                    imgSrc = 'images/router3-3.jpg';
+                } else if (s.name === 'Quiet Alley') {
+                    imgSrc = 'images/router3-4.jpg';
+                }
+
+                if (imgSrc) {
+                    m.bindPopup(`
+                        <div class="spot-popup" style="width:180px;">
+                            <h4>${s.name}</h4>
+                            <img src="${imgSrc}" alt="${s.name}" style="width:100%;height:180px;object-fit:contain;border-radius:8px;margin:10px 0;cursor:pointer;" onclick="window.open('${imgSrc}', '_blank')">
+                            <p>${s.desc}</p>
+                        </div>
+                    `);
+                } else {
+                    m.bindPopup(`<b>${s.name}</b><br>${s.desc}`);
+                }
                 routeLayers.push(m);
             });
 

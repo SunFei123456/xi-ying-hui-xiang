@@ -61,7 +61,7 @@
 
         #map2d {
             width: 100%;
-            height: 380px;
+            height: 580px;
             z-index: 1;
         }
 
@@ -634,9 +634,7 @@
 
 
         /* 機位彈窗 */
-        .spot-popup {
-            min-width: 220px;
-        }
+
 
         .spot-popup h4 {
             font-family: 'Noto Serif SC', serif;
@@ -993,16 +991,16 @@
             style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; padding: 20px 0; border-top: 1px solid #ddd;">
             <a href="artistic_landmark.html"
                 style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: color 0.3s;">
-                <span>←</span> Previous: Artistic Landmark
+                <span>←</span> 上一頁：藝術地標
             </a>
             <a href="works.html"
                 style="color: var(--accent-red); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; font-weight: 500; transition: color 0.3s;">
-                Next: Works <span>→</span>
+                下一頁：作品展示 <span>→</span>
             </a>
         </div>
 
         <div class="page-footer">
-            The Graffiti Culture in Sai Ying Pun · Hong Kong
+            西營盤塗鴉文化 · 香港
         </div>
     </main>
 
@@ -1204,7 +1202,44 @@
                     iconAnchor: [16, 16]
                 });
                 const m = L.marker([s.lat, s.lng], { icon }).addTo(map2d);
-                m.bindPopup(`<b>${s.name}</b><br>${s.desc}`);
+
+                // 標記點添加圖片
+                let imgSrc = '';
+                if (s.name === 'PMQ') {
+                    imgSrc = 'images/router1-1.jpg';
+                } else if (s.name === '西營盤街') {
+                    imgSrc = 'images/router1-2.jpg';
+                } else if (s.name === '東邊街') {
+                    imgSrc = 'images/router1-3.jpg';
+                } else if (s.name === '石棧里/奇靈里') {
+                    imgSrc = 'images/router1-4.jpg';
+                } else if (s.name === '彩虹樓梯') {
+                    imgSrc = 'images/router2-1.jpg';
+                } else if (s.name === '小眾塗鴉牆') {
+                    imgSrc = 'images/router2-2.jpg';
+                } else if (s.name === 'Winston Coffee') {
+                    imgSrc = 'images/router2-3.jpg';
+                } else if (s.name === '高街') {
+                    imgSrc = 'images/router3-1.jpg';
+                } else if (s.name === '正街') {
+                    imgSrc = 'images/router3-2.jpg';
+                } else if (s.name === '西營盤街市') {
+                    imgSrc = 'images/router3-3.jpg';
+                } else if (s.name === '寧靜小巷') {
+                    imgSrc = 'images/router3-4.jpg';
+                }
+
+                if (imgSrc) {
+                    m.bindPopup(`
+                        <div class="spot-popup" style="width:180px;">
+                            <h4>${s.name}</h4>
+                            <img src="${imgSrc}" alt="${s.name}" style="width:100%;height:180px;object-fit:contain;border-radius:8px;margin:10px 0;cursor:pointer;" onclick="window.open('${imgSrc}', '_blank')">
+                            <p>${s.desc}</p>
+                        </div>
+                    `);
+                } else {
+                    m.bindPopup(`<b>${s.name}</b><br>${s.desc}`);
+                }
                 routeLayers.push(m);
             });
 

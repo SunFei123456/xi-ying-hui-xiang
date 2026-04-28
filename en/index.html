@@ -164,6 +164,49 @@
             transform: translateY(-50%);
         }
 
+        /* Music Play Button */
+        .music-btn {
+            position: fixed;
+            right: 24px;
+            bottom: 40px;
+            width: 50px;
+            height: 50px;
+            background: rgba(192, 57, 43, 0.9);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .music-btn:hover {
+            background: rgba(192, 57, 43, 1);
+            transform: scale(1.1);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-btn.playing {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
         .lang-btn {
             display: inline-flex;
             align-items: center;
@@ -504,6 +547,16 @@
         </div>
     </section>
 
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="audio/bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Play Button -->
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Play/Pause Music">
+        🎵
+    </button>
+
     <!-- 内容区域 -->
     <main class="content">
         <div class="cards-grid">
@@ -582,6 +635,26 @@
     </main>
 
     <script>
+        // Music playback control
+        let isPlaying = false;
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+                musicBtn.innerHTML = '🎵';
+                musicBtn.title = 'Play Music';
+            } else {
+                bgMusic.play().catch(e => console.log('Audio play failed:', e));
+                musicBtn.classList.add('playing');
+                musicBtn.innerHTML = '🔊';
+                musicBtn.title = 'Pause Music';
+            }
+            isPlaying = !isPlaying;
+        }
+
         // 页面加载完成后隐藏 loader
         window.addEventListener('load', () => {
             setTimeout(() => {
