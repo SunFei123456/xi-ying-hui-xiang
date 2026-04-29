@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Music Player</title>
+</head>
+
+<body>
+    <audio id="bgAudio" preload="auto" loop>
+        <source src="audio/bgm.mp3" type="audio/mpeg">
+    </audio>
+    <script>
+        (function () {
+            const audio = document.getElementById('bgAudio');
+            const STORAGE_KEY = 'syp_music';
+
+            // Restore volume
+            const savedVolume = localStorage.getItem(STORAGE_KEY + '_volume');
+            if (savedVolume) audio.volume = parseFloat(savedVolume);
+
+            // Restore playback position
+            const savedTime = localStorage.getItem(STORAGE_KEY + '_time');
+            if (savedTime) audio.currentTime = parseFloat(savedTime);
+
+            // Restore playing state
+            const wasPlaying = localStorage.getItem(STORAGE_KEY + '_playing') === 'true';
+
+            // Auto-resume if was playing
+            if (wasPlaying) {
+                audio.play().catch(function (e) {
+                    console.log('Autoplay blocked, waiting for user interaction');
+                });
+            }
+
+            // Save state periodically
+            setInterval(function () {
+                localStorage.setItem(STORAGE_KEY + '_time', audio.currentTime);
+                localStorage.setItem(STORAGE_KEY + '_playing', !audio.paused);
+                localStorage.setItem(STORAGE_KEY + '_volume', audio.volume);
+            }, 500);
+
+            // Listen for parent messages
+            window.addEventListener('message', function (event) {
+                if (event.data.type === 'PLAY') {
+                    if (event.data.currentTime) audio.currentTime = event.data.currentTime;
+                    if (event.data.volume) audio.volume = event.data.volume;
+                    audio.play().catch(function (e) { });
+                } else if (event.data.type === 'PAUSE') {
+                    audio.pause();
+                } else if (event.data.type === 'GET_STATE') {
+                    parent.postMessage({
+                        type: 'STATE',
+                        isPlaying: !audio.paused,
+                        currentTime: audio.currentTime,
+                        volume: audio.volume
+                    }, '*');
+                }
+            });
+
+            // Notify parent of state changes
+            audio.addEventListener('play', function () {
+                try {
+                    parent.postMessage({ type: 'PLAYING', isPlaying: true }, '*');
+                } catch (e) { }
+            });
+
+            audio.addEventListener('pause', function () {
+                try {
+                    parent.postMessage({ type: 'PAUSED', isPlaying: false }, '*');
+                } catch (e) { }
+            });
+        })();
+    </script>
+</body>
+
+</html>

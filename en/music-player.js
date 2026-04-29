@@ -1,136 +1,139 @@
-// Global Music Player with Service Worker and localStorage sync
+// Global Music Player using popup window
 (function() {
     'use strict';
 
     const MUSIC_KEY = 'syp_music_state';
-    const AUDIO_URL = 'audio/bgm.mp3';
-    
-    let audio = null;
+    let popupWindow = null;
     let isPlaying = false;
-    let swRegistration = null;
+    let popupCheckInterval = null;
 
-    // Initialize
     function init() {
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then((registration) => {
-                    swRegistration = registration;
-                    console.log('SW registered:', registration);
-                })
-                .catch((error) => {
-                    console.log('SW registration failed:', error);
-                });
-
-            // Listen for messages from SW
-            navigator.serviceWorker.addEventListener('message', (event) => {
-                if (event.data && event.data.type === 'SYNC_MUSIC_STATE') {
-                    syncFromOtherPage(event.data.isPlaying);
-                }
-            });
+        // Check if popup is still open
+        if (popupWindow && !popupWindow.closed) {
+            updateFromPopup();
+        } else {
+            popupWindow = null;
+            clearInterval(popupCheckInterval);
         }
-
-        // Restore state from localStorage
+        
+        // Restore state
         restoreState();
         
-        // Setup visibility change listener
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        
-        // Setup storage listener for cross-tab sync
-        window.addEventListener('storage', handleStorageChange);
+        // Update UI when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', updateUI);
+        } else {
+            updateUI();
+        }
     }
 
-    // Create or get audio element
-    function getAudio() {
-        if (!audio) {
-            audio = new Audio(AUDIO_URL);
-            audio.loop = true;
-            audio.volume = 0.5;
-            
-            audio.addEventListener('play', () => {
-                isPlaying = true;
-                saveState();
-                updateUI();
-                notifyServiceWorker();
-            });
-            
-            audio.addEventListener('pause', () => {
+    function createPopupPlayer() {
+        const width = 300;
+        const height = 150;
+        const left = window.screenX + (window.outerWidth - width) / 2;
+        const top = window.screenY + (window.outerHeight - height) / 2;
+        
+        popupWindow = window.open(
+            'music-player.html',
+            'MusicPlayer',
+            'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top + ',status=no,scrollbars=no,resizable=no'
+        );
+        
+        // Check if popup was blocked
+        if (!popupWindow) {
+            console.log('Popup was blocked by browser');
+            alert('Please allow popup windows for music playback');
+            return false;
+        }
+        
+        // Monitor popup
+        popupCheckInterval = setInterval(function() {
+            if (popupWindow.closed) {
+                popupWindow = null;
+                clearInterval(popupCheckInterval);
                 isPlaying = false;
                 saveState();
                 updateUI();
-                notifyServiceWorker();
-            });
-        }
-        return audio;
+            }
+        }, 500);
+        
+        return true;
     }
 
-    // Toggle music
-    window.toggleMusic = function() {
-        const music = getAudio();
+    function playMusic() {
+        if (!popupWindow || popupWindow.closed) {
+            if (!createPopupPlayer()) return;
+        }
         
+        // Wait for popup to load, then play
+        setTimeout(function() {
+            if (popupWindow && !popupWindow.closed) {
+                popupWindow.postMessage({ type: 'PLAY' }, '*');
+            }
+        }, 100);
+        
+        isPlaying = true;
+        saveState();
+        updateUI();
+    }
+
+    function pauseMusic() {
+        if (popupWindow && !popupWindow.closed) {
+            popupWindow.postMessage({ type: 'PAUSE' }, '*');
+        }
+        
+        isPlaying = false;
+        saveState();
+        updateUI();
+    }
+
+    window.toggleMusic = function() {
         if (isPlaying) {
-            music.pause();
+            pauseMusic();
         } else {
-            music.play().catch((e) => {
-                console.log('Audio play failed:', e);
-            });
+            playMusic();
         }
     };
 
-    // Sync from other page
-    function syncFromOtherPage(playing) {
-        const music = getAudio();
-        
-        if (playing && !isPlaying) {
-            music.play().catch((e) => console.log('Sync play failed:', e));
-        } else if (!playing && isPlaying) {
-            music.pause();
+    function updateFromPopup() {
+        if (popupWindow && !popupWindow.closed) {
+            popupWindow.postMessage({ type: 'GET_STATE' }, '*');
         }
     }
 
-    // Handle visibility change
-    function handleVisibilityChange() {
-        // Don't pause when hidden - let it play in background
-        // Just sync state when becoming visible again
-        if (!document.hidden) {
-            restoreState();
-        }
-    }
-
-    // Handle storage change (cross-tab sync)
-    function handleStorageChange(e) {
-        if (e.key === MUSIC_KEY) {
-            const state = JSON.parse(e.newValue || '{}');
-            if (state.isPlaying !== isPlaying) {
-                syncFromOtherPage(state.isPlaying);
+    function handleMessage(event) {
+        if (event.data && (event.data.type === 'STATE' || event.data.type === 'PLAYING' || event.data.type === 'PAUSED')) {
+            const wasPlaying = isPlaying;
+            isPlaying = event.data.isPlaying;
+            
+            if (wasPlaying !== isPlaying) {
+                saveState();
+                updateUI();
             }
         }
     }
 
-    // Save state to localStorage
+    function getState() {
+        try {
+            return JSON.parse(localStorage.getItem(MUSIC_KEY) || '{}');
+        } catch (e) {
+            return {};
+        }
+    }
+
     function saveState() {
         const state = {
-            isPlaying: isPlaying,
-            timestamp: Date.now()
+            isPlaying: isPlaying
         };
         localStorage.setItem(MUSIC_KEY, JSON.stringify(state));
     }
 
-    // Restore state from localStorage
     function restoreState() {
-        try {
-            const state = JSON.parse(localStorage.getItem(MUSIC_KEY) || '{}');
-            if (state.isPlaying && !isPlaying) {
-                const music = getAudio();
-                music.play().catch((e) => console.log('Restore play failed:', e));
-            }
-            updateUI();
-        } catch (e) {
-            console.log('Restore state failed:', e);
-        }
+        const state = getState();
+        // Don't auto-play on page load, just update UI to show last state
+        isPlaying = false;
     }
 
-    // Update UI
     function updateUI() {
         const btn = document.getElementById('musicBtn');
         if (btn) {
@@ -146,20 +149,9 @@
         }
     }
 
-    // Notify Service Worker
-    function notifyServiceWorker() {
-        if (swRegistration && swRegistration.active) {
-            swRegistration.active.postMessage({
-                type: 'PLAY_MUSIC',
-                isPlaying: isPlaying
-            });
-        }
-    }
+    // Listen for messages
+    window.addEventListener('message', handleMessage);
 
-    // Auto-init when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+    // Start
+    init();
 })();
