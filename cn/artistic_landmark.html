@@ -230,12 +230,32 @@
 
         .street-desc {
             width: 100%;
-            padding: 8px;
-            font-size: 0.75rem;
+            padding: 12px;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            text-align: center;
-            line-height: 1.5;
-            margin-top: 4px;
+            text-align: left;
+            line-height: 1.7;
+            margin-top: 8px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+            border-radius: 12px;
+        }
+
+        .street-item.active .street-desc {
+            max-height: 500px;
+            opacity: 1;
+            padding: 12px;
+        }
+
+        .street-label {
+            cursor: pointer;
+        }
+
+        .street-image-box {
+            cursor: pointer;
         }
 
         .street-label::before {
@@ -369,28 +389,36 @@
                         <img src="images/street1.jpg" alt="卑路乍街">
                     </div>
                     <div class="street-label">卑路乍街</div>
-                    <div class="street-desc">西營盤主要街道，沿街可見多處大型壁畫，展現本地生活風貌</div>
+                    <div class="street-desc">
+                        作為西營盤的主幹道，卑路乍街是本地生活與街頭藝術的碰撞現場。沿街的老式唐樓外牆爬滿了大型塗鴉壁畫，從充滿市井煙火的生活場景，到大膽先鋒的創意作品，每一幅都在講述香港的故事。走在這裡，你既能感受到老街區的鬆弛日常，又能被年輕創作者的活力所感染，一步一景都是鮮活的城市切片。
+                    </div>
                 </div>
                 <div class="street-item">
                     <div class="street-image-box">
                         <img src="images/street2.jpg" alt="薄扶林道">
                     </div>
                     <div class="street-label">薄扶林道</div>
-                    <div class="street-desc">連接西營盤與薄扶林，沿途建築牆面藏有精緻塗鴉作品</div>
+                    <div class="street-desc">
+                        連接西營盤與薄扶林的這條道路，像一條藏著驚喜的藝術走廊。沿途的建築外牆、天橋立柱甚至轉角的牆面上，都藏著不期而遇的精緻塗鴉作品。沒有刻意的網紅打卡感，卻能在不經意間撞見充滿巧思的街頭創作，讓通勤路變成一場迷你的藝術漫遊，每一處細節都在打破你對香港主幹道的刻板印象。
+                    </div>
                 </div>
                 <div class="street-item">
                     <div class="street-image-box">
                         <img src="images/street3.jpg" alt="西營盤正街">
                     </div>
                     <div class="street-label">西營盤正街</div>
-                    <div class="street-desc">香港最陡街道之一，兩旁建築佈滿色彩繽紛的街頭藝術</div>
+                    <div class="street-desc">
+                        作為香港最陡的街道之一，正街是西營盤最接地氣的生活中心，也是街頭藝術的天然畫布。一邊是熱鬧的街市、老茶餐廳，飄著魚蛋和雲吞面的香氣；另一邊，色彩斑斕的塗鴉順著陡峭的坡道鋪展開來，從市井煙火到先鋒藝術無縫銜接。在這裡，你能一邊感受香港人的日常慢生活，一邊被街頭創作者的大膽色彩所震撼，新舊香港在這裡碰撞出最鮮活的火花。
+                    </div>
                 </div>
                 <div class="street-item">
                     <div class="street-image-box">
                         <img src="images/street4.jpg" alt="高街">
                     </div>
                     <div class="street-label">高街</div>
-                    <div class="street-desc">歷史建築與現代塗鴉交織，充滿文藝氣息的打卡熱點</div>
+                    <div class="street-desc">
+                        西營盤標誌性的高街，是復古風情與現代藝術的完美融合。維多利亞時期的歷史建築順著山勢起伏，藤蔓爬滿老式唐樓的騎樓外牆，轉角的舊商鋪招牌還保留著幾十年前的模樣。而當你抬頭，就能看到大膽前衛的塗鴉與斑駁的老牆交織，像時光與創意在對話。這裡既有老香港畫冊般的溫柔細節，又充滿文藝青年喜愛的先鋒氣息，每一處角落都值得你放慢腳步細細品味。
+                    </div>
                 </div>
             </div>
         </section>
@@ -420,6 +448,26 @@
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 300);
+        });
+
+        // 街道描述點擊展開/收起功能
+        document.querySelectorAll('.street-item').forEach(item => {
+            const label = item.querySelector('.street-label');
+            const imageBox = item.querySelector('.street-image-box');
+
+            const toggleDesc = () => {
+                // 先關閉其他已展開的項目
+                document.querySelectorAll('.street-item.active').forEach(activeItem => {
+                    if (activeItem !== item) {
+                        activeItem.classList.remove('active');
+                    }
+                });
+                // 切換當前項目
+                item.classList.toggle('active');
+            };
+
+            if (label) label.addEventListener('click', toggleDesc);
+            if (imageBox) imageBox.addEventListener('click', toggleDesc);
         });
     </script>
 </body>

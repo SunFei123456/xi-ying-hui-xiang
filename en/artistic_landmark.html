@@ -230,12 +230,32 @@
 
         .street-desc {
             width: 100%;
-            padding: 8px;
-            font-size: 0.75rem;
+            padding: 12px;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            text-align: center;
-            line-height: 1.5;
-            margin-top: 4px;
+            text-align: left;
+            line-height: 1.7;
+            margin-top: 8px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+            background: linear-gradient(135deg, #fdf6f6, #fff9f5);
+            border-radius: 12px;
+        }
+
+        .street-item.active .street-desc {
+            max-height: 500px;
+            opacity: 1;
+            padding: 12px;
+        }
+
+        .street-label {
+            cursor: pointer;
+        }
+
+        .street-image-box {
+            cursor: pointer;
         }
 
         .street-label::before {
@@ -376,32 +396,49 @@
                         <img src="images/street1.jpg" alt="Belcher's Street">
                     </div>
                     <div class="street-label">Belcher's Street</div>
-                    <div class="street-desc">A main street in Sai Ying Pun featuring large murals showcasing local life
-                        and culture</div>
+                    <div class="street-desc">As the main artery of Sai Ying Pun, Belcher's Street is where local life
+                        meets street art. Large murals sprawl across the walls of old tong lau buildings—depicting
+                        everything from everyday Hong Kong scenes to bold, avant-garde creations, each one telling a
+                        story of the city. Walking here, you can feel the laid-back daily rhythm of the old neighborhood
+                        while being energized by the creativity of young artists, with every step offering a vivid
+                        snapshot of urban life.</div>
                 </div>
                 <div class="street-item">
                     <div class="street-image-box">
                         <img src="images/street2.jpg" alt="Pok Fu Lam Road">
                     </div>
                     <div class="street-label">Pok Fu Lam Road</div>
-                    <div class="street-desc">Connecting Sai Ying Pun to Pok Fu Lam, with exquisite graffiti works hidden
-                        along building walls</div>
+                    <div class="street-desc">Connecting Sai Ying Pun and Pok Fu Lam, this road is like an art corridor
+                        filled with surprises. Delicate graffiti pieces hide on building facades, flyover pillars, and
+                        even corner walls along the way. There's no forced "Instagram vibe" here—instead, you stumble
+                        upon thoughtful street art creations unexpectedly, turning a commute into a mini art stroll that
+                        defies stereotypes of Hong Kong's main roads.</div>
                 </div>
                 <div class="street-item">
                     <div class="street-image-box">
                         <img src="images/street3.jpg" alt="Centre Street">
                     </div>
                     <div class="street-label">Centre Street</div>
-                    <div class="street-desc">One of Hong Kong's steepest streets, lined with colorful street art on both
-                        sides</div>
+                    <div class="street-desc">One of Hong Kong's steepest streets, Centre Street is both Sai Ying Pun's
+                        most down-to-earth living hub and a natural canvas for street art. On one side, bustling markets
+                        and old cha chaan tengs fill the air with the aroma of fish balls and wonton noodles; on the
+                        other, vibrant graffiti cascades down the steep slope, seamlessly blending everyday life with
+                        avant-garde art. Here, you can soak in the slow daily rhythm of Hong Kong locals while being
+                        blown away by the bold colors of street creators, where old and new Hong Kong collide in the
+                        most vivid way.</div>
                 </div>
                 <div class="street-item">
                     <div class="street-image-box">
                         <img src="images/street4.jpg" alt="High Street">
                     </div>
                     <div class="street-label">High Street</div>
-                    <div class="street-desc">Where historic architecture meets modern graffiti, a popular spot filled
-                        with artistic atmosphere</div>
+                    <div class="street-desc">Iconic High Street in Sai Ying Pun is a perfect blend of retro charm and
+                        modern art. Victorian-era historic buildings wind along the sloping terrain, with vines climbing
+                        the colonnades of old tong lau buildings, and decades-old shop signs still standing at street
+                        corners. Yet, as you look up, bold and avant-garde graffiti intertwines with weathered old
+                        walls, like a conversation between time and creativity. It holds the gentle details of a vintage
+                        Hong Kong picture book while brimming with the avant-garde vibe beloved by art lovers, every
+                        corner inviting you to slow down and savor.</div>
                 </div>
             </div>
         </section>
@@ -431,6 +468,26 @@
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 300);
+        });
+
+        // Street description expand/collapse functionality
+        document.querySelectorAll('.street-item').forEach(item => {
+            const label = item.querySelector('.street-label');
+            const imageBox = item.querySelector('.street-image-box');
+
+            const toggleDesc = () => {
+                // Close other expanded items first
+                document.querySelectorAll('.street-item.active').forEach(activeItem => {
+                    if (activeItem !== item) {
+                        activeItem.classList.remove('active');
+                    }
+                });
+                // Toggle current item
+                item.classList.toggle('active');
+            };
+
+            if (label) label.addEventListener('click', toggleDesc);
+            if (imageBox) imageBox.addEventListener('click', toggleDesc);
         });
     </script>
 </body>
