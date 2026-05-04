@@ -205,7 +205,6 @@ body::before {
 
 .bottom-bar {
   height: 8px;
-  background: var(--nav-bg);
   margin-top: 40px;
   border-radius: 4px 4px 0 0;
 }

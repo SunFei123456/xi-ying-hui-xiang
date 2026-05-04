@@ -195,20 +195,49 @@ body::before {
 
 /* ===== 頁面底部 ===== */
 .page-footer {
+  background: var(--nav-bg);
+  padding: 40px 24px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-inner {
+  max-width: 800px;
+  margin: 0 auto;
   text-align: center;
-  margin-top: 56px;
-  padding-top: 24px;
-  border-top: 1px dashed #ccc;
-  color: #999;
-  font-size: 0.85rem;
+}
+
+.footer-title {
   font-family: "Shadows Into Light", cursive;
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.footer-info {
+  margin-bottom: 24px;
+  line-height: 1.8;
+}
+
+.footer-info p {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.footer-label {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.footer-copyright {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .bottom-bar {
   height: 8px;
-  background: var(--nav-bg);
-  margin-top: 40px;
-  border-radius: 4px 4px 0 0;
+  background: var(--accent-red);
 }
 
 /* ===== 滾動條 ===== */
