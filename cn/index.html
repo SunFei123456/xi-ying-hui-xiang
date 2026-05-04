@@ -156,40 +156,6 @@
             position: relative;
         }
 
-        /* 語言切換按鈕 */
-        .lang-switch {
-            position: absolute;
-            right: 24px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .lang-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            color: white;
-            text-decoration: none;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .lang-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .lang-btn svg {
-            width: 16px;
-            height: 16px;
-        }
-
         .slogan-text {
             font-family: 'Shadows Into Light', cursive;
             font-size: clamp(1.5rem, 3vw, 2.2rem);
@@ -371,12 +337,6 @@
                 gap: 28px 20px;
             }
 
-            .lang-switch {
-                position: static;
-                transform: none;
-                margin-top: 12px;
-            }
-
             .hero {
                 height: 45vh;
                 min-height: 320px;
@@ -462,6 +422,34 @@
         <div class="loader"></div>
     </div>
 
+    <!-- 頂部導航 -->
+    <nav class="top-nav">
+        <div class="top-nav-inner">
+            <div class="nav-left">
+                <a href="index.html" class="nav-logo">西營盤塗鴉文化</a>
+            </div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="overview.html" class="nav-link">概覽</a></li>
+                    <li><a href="background.html" class="nav-link">背景介紹</a></li>
+                    <li><a href="artistic_landmark.html" class="nav-link">藝術地標</a></li>
+                    <li><a href="exploration-route.html" class="nav-link">探索路線</a></li>
+                    <li><a href="works.html" class="nav-link">作品賞析</a></li>
+                    <li><a href="cultural_significance.html" class="nav-link">文化意義</a></li>
+                </ul>
+                <a href="../en/index.html" class="nav-lang">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M2 12h20" />
+                        <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                    EN
+                </a>
+            </div>
+        </div>
+    </nav>
+
     <!-- Hero 區域 -->
     <section class="hero">
         <div class="hero-slider">
@@ -490,17 +478,6 @@
     <section class="slogan-section">
         <div class="slogan-container">
             <p class="slogan-text">探索西營盤充滿活力的街頭藝術場景</p>
-            <div class="lang-switch">
-                <a href="../en/index.html" class="lang-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M2 12h20" />
-                        <path
-                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                    </svg>
-                    English
-                </a>
-            </div>
         </div>
     </section>
 

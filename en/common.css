@@ -75,30 +75,92 @@ body::before {
   height: 56px;
 }
 
-.back-link {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-size: 0.9rem;
+.nav-left {
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: color 0.3s;
 }
 
-.back-link:hover {
-  color: white;
-}
-
-.back-link svg {
-  width: 18px;
-  height: 18px;
-}
-
-.nav-brand {
+.nav-logo {
   font-family: "Permanent Marker", cursive;
   color: white;
-  font-size: 1rem;
+  font-size: 1.1rem;
   letter-spacing: 1px;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+
+.nav-logo:hover {
+  opacity: 0.8;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.nav-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  color: white;
+  background: rgba(192, 57, 43, 0.8);
+}
+
+.nav-lang {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.3s;
+}
+
+.nav-lang:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.nav-lang svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  
+  .top-nav-inner {
+    padding: 0 16px;
+  }
+  
+  .nav-logo {
+    font-size: 1rem;
+  }
 }
 
 /* ===== 主内容区 ===== */
